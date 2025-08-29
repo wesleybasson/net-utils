@@ -1,0 +1,14 @@
+D:\Projects\libraries\apix\src\ApiX.Testing\obj\Debug\net9.0\ApiX.Testing.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\libraries\apix\src\ApiX.Testing\obj\Debug\net9.0\ApiX.Testing.AssemblyInfoInputs.cache
+D:\Projects\libraries\apix\src\ApiX.Testing\obj\Debug\net9.0\ApiX.Testing.AssemblyInfo.cs
+D:\Projects\libraries\apix\src\ApiX.Testing\obj\Debug\net9.0\ApiX.Testing.csproj.CoreCompileInputs.cache
+D:\Projects\libraries\apix\src\ApiX.Testing\obj\Debug\net9.0\ApiX.Testing.sourcelink.json
+D:\Projects\libraries\apix\src\ApiX.Testing\obj\Debug\net9.0\ApiX.Testing.xml
+D:\Projects\libraries\apix\src\ApiX.Testing\bin\Debug\net9.0\ApiX.Testing.deps.json
+D:\Projects\libraries\apix\src\ApiX.Testing\bin\Debug\net9.0\ApiX.Testing.dll
+D:\Projects\libraries\apix\src\ApiX.Testing\bin\Debug\net9.0\ApiX.Testing.pdb
+D:\Projects\libraries\apix\src\ApiX.Testing\bin\Debug\net9.0\ApiX.Testing.xml
+D:\Projects\libraries\apix\src\ApiX.Testing\obj\Debug\net9.0\ApiX.Testing.dll
+D:\Projects\libraries\apix\src\ApiX.Testing\obj\Debug\net9.0\refint\ApiX.Testing.dll
+D:\Projects\libraries\apix\src\ApiX.Testing\obj\Debug\net9.0\ApiX.Testing.pdb
+D:\Projects\libraries\apix\src\ApiX.Testing\obj\Debug\net9.0\ref\ApiX.Testing.dll

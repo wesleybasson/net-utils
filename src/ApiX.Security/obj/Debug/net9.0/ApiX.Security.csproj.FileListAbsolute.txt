@@ -1,0 +1,15 @@
+D:\Projects\libraries\apix\src\ApiX.Security\obj\Debug\net9.0\ApiX.Security.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\libraries\apix\src\ApiX.Security\obj\Debug\net9.0\ApiX.Security.AssemblyInfoInputs.cache
+D:\Projects\libraries\apix\src\ApiX.Security\obj\Debug\net9.0\ApiX.Security.AssemblyInfo.cs
+D:\Projects\libraries\apix\src\ApiX.Security\obj\Debug\net9.0\ApiX.Security.csproj.CoreCompileInputs.cache
+D:\Projects\libraries\apix\src\ApiX.Security\obj\Debug\net9.0\ApiX.Security.sourcelink.json
+D:\Projects\libraries\apix\src\ApiX.Security\obj\Debug\net9.0\ApiX.Security.xml
+D:\Projects\libraries\apix\src\ApiX.Security\bin\Debug\net9.0\ApiX.Security.deps.json
+D:\Projects\libraries\apix\src\ApiX.Security\bin\Debug\net9.0\ApiX.Security.dll
+D:\Projects\libraries\apix\src\ApiX.Security\bin\Debug\net9.0\ApiX.Security.pdb
+D:\Projects\libraries\apix\src\ApiX.Security\bin\Debug\net9.0\ApiX.Security.xml
+D:\Projects\libraries\apix\src\ApiX.Security\obj\Debug\net9.0\ApiX.Security.dll
+D:\Projects\libraries\apix\src\ApiX.Security\obj\Debug\net9.0\refint\ApiX.Security.dll
+D:\Projects\libraries\apix\src\ApiX.Security\obj\Debug\net9.0\ApiX.Security.pdb
+D:\Projects\libraries\apix\src\ApiX.Security\obj\Debug\net9.0\ref\ApiX.Security.dll
+D:\Projects\libraries\apix\src\ApiX.Security\obj\Debug\net9.0\ApiX.Security.csproj.AssemblyReference.cache

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ApiX.Configuration</name>
+    </assembly>
+    <members>
+        <member name="T:ApiX.Configuration.Options.EnvConfig">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:ApiX.Configuration.Validation.EnvConfigValidator">
+            <summary>
+            
+            </summary>
+        </member>
+    </members>
+</doc>

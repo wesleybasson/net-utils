@@ -1,0 +1,14 @@
+D:\Projects\libraries\apix\src\ApiX.Abstractions\obj\Debug\net9.0\ApiX.Abstractions.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\libraries\apix\src\ApiX.Abstractions\obj\Debug\net9.0\ApiX.Abstractions.AssemblyInfoInputs.cache
+D:\Projects\libraries\apix\src\ApiX.Abstractions\obj\Debug\net9.0\ApiX.Abstractions.AssemblyInfo.cs
+D:\Projects\libraries\apix\src\ApiX.Abstractions\obj\Debug\net9.0\ApiX.Abstractions.csproj.CoreCompileInputs.cache
+D:\Projects\libraries\apix\src\ApiX.Abstractions\obj\Debug\net9.0\ApiX.Abstractions.sourcelink.json
+D:\Projects\libraries\apix\src\ApiX.Abstractions\obj\Debug\net9.0\ApiX.Abstractions.xml
+D:\Projects\libraries\apix\src\ApiX.Abstractions\bin\Debug\net9.0\ApiX.Abstractions.deps.json
+D:\Projects\libraries\apix\src\ApiX.Abstractions\bin\Debug\net9.0\ApiX.Abstractions.dll
+D:\Projects\libraries\apix\src\ApiX.Abstractions\bin\Debug\net9.0\ApiX.Abstractions.pdb
+D:\Projects\libraries\apix\src\ApiX.Abstractions\bin\Debug\net9.0\ApiX.Abstractions.xml
+D:\Projects\libraries\apix\src\ApiX.Abstractions\obj\Debug\net9.0\ApiX.Abstractions.dll
+D:\Projects\libraries\apix\src\ApiX.Abstractions\obj\Debug\net9.0\refint\ApiX.Abstractions.dll
+D:\Projects\libraries\apix\src\ApiX.Abstractions\obj\Debug\net9.0\ApiX.Abstractions.pdb
+D:\Projects\libraries\apix\src\ApiX.Abstractions\obj\Debug\net9.0\ref\ApiX.Abstractions.dll

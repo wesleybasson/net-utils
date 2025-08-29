@@ -1,0 +1,48 @@
+<Project>
+  <PropertyGroup Label="Versioning">
+    <!-- Bump these in CI or locally -->
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+    <Version>$(VersionPrefix)$(VersionSuffix)</Version>
+
+    <!-- Assembly/File versions -->
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>$(VersionPrefix).0</FileVersion>
+
+    <!-- NuGet package metadata defaults -->
+    <Authors>ApiX Team</Authors>
+    <Company>Litheon</Company>
+    <Product>ApiX</Product>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryBranch>main</RepositoryBranch>
+    <RepositoryUrl>https://github.com/wesleybasson/net-utils</RepositoryUrl>
+    <PackageProjectUrl>https://www.wmbonline.co.za</PackageProjectUrl>
+    <PackageIcon>apix-icon.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>aspnetcore;webapi;apix;validation;observability;security</PackageTags>
+
+    <!-- Packing defaults for libraries -->
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Include README.md if present -->
+    <PackageReadmeFile Condition="Exists('README.md')">README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <!-- IsPackable rules -->
+  <PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.Tests'))">
+    <IsPackable>false</IsPackable>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <!-- Per-folder conventions (cross-platform path check) -->
+  <PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectDirectory)').Contains('\tests\')) OR $([System.String]::Copy('$(MSBuildProjectDirectory)').Contains('/tests/'))">
+    <IsPackable>false</IsPackable>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+</Project>

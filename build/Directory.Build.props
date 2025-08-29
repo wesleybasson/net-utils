@@ -1,0 +1,48 @@
+<Project>
+  <PropertyGroup>
+    <!-- Central Package Management settings -->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <CentralPackageVersionOverrideEnabled>false</CentralPackageVersionOverrideEnabled>
+
+    <!-- Defaults -->
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <LangVersion>latestmajor</LangVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- .NET analysers -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+  </PropertyGroup>
+
+  <PropertyGroup Label="ApiX Repo Paths">
+    <DirSep>$([System.IO.Path]::DirectorySeparatorChar)</DirSep>
+    <RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..'))$(DirSep)</RepoRoot>
+    <ApiXAssetsDir>$(RepoRoot)build$(DirSep)assets$(DirSep)</ApiXAssetsDir>
+    <ApiXIconPath>$(ApiXAssetsDir)apix-icon.png</ApiXIconPath>
+  </PropertyGroup>
+
+  <ItemGroup Condition="Exists('$(ApiXIconPath)')">
+    <None Include="$(ApiXIconPath)"
+          Pack="true"
+          PackagePath=""
+          Link="apix-icon.png" />
+  </ItemGroup>
+
+  <Import Project="Versions.props" />
+
+  <Target Name="FailIfPackageReferenceHasVersion" BeforeTargets="Restore">
+    <ItemGroup>
+      <_InvalidPkg Include="@(PackageReference)" Condition="'%(PackageReference.Version)' != ''" />
+    </ItemGroup>
+
+    <Message Importance="high" Condition="'@(_InvalidPkg)' != ''"
+             Text="Package(s) with inline Version detected: %(_InvalidPkg.Identity) (Version=%(_InvalidPkg.Version)) in %(_InvalidPkg.MSBuildSourceFile)"/>
+
+    <Error Condition="'@(_InvalidPkg)' != ''"
+           Text="Do not specify package versions in project files. Move versions to Directory.Packages.props."
+           Code="CPM0001"/>
+  </Target>
+</Project>

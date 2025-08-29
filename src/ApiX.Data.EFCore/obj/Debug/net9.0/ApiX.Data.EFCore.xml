@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ApiX.Data.EFCore</name>
+    </assembly>
+    <members>
+        <member name="T:ApiX.Data.EFCore.Extensions.QueryableExtensions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:ApiX.Data.EFCore.Guards.EntityCheck">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ApiX.Data.EFCore.Guards.EntityCheck.EntityGuidExists``1(Microsoft.EntityFrameworkCore.DbSet{``0},System.String)">
+            <summary>
+            
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <param name="dbSet"></param>
+            <param name="guid"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ApiX.Data.EFCore.Guards.EntityCheck.EntityGuidExists``1(Microsoft.EntityFrameworkCore.DbSet{``0},System.Guid)">
+            <summary>
+            
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <param name="dbSet"></param>
+            <param name="guid"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "7do45AjFpc0=",
+  "success": true,
+  "projectFilePath": "D:\\Projects\\libraries\\apix\\src\\ApiX.Validation\\ApiX.Validation.csproj",
+  "expectedPackageFiles": [
+    "D:\\Projects\\libraries\\apix\\.nuget\\packages\\fluentvalidation\\12.0.0\\fluentvalidation.12.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

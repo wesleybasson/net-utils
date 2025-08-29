@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ApiX.Validation</name>
+    </assembly>
+    <members>
+        <member name="T:ApiX.Validation.Base.AbstractPrivateRequestValidator`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:ApiX.Validation.Base.AbstractPrivateRequestValidator`1.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:ApiX.Validation.Base.AbstractPublicRequestValidator`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:ApiX.Validation.Base.AbstractPublicRequestValidator`1.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+    </members>
+</doc>

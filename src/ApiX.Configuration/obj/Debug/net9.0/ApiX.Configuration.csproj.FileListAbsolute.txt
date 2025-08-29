@@ -1,0 +1,14 @@
+D:\Projects\libraries\apix\src\ApiX.Configuration\obj\Debug\net9.0\ApiX.Configuration.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\libraries\apix\src\ApiX.Configuration\obj\Debug\net9.0\ApiX.Configuration.AssemblyInfoInputs.cache
+D:\Projects\libraries\apix\src\ApiX.Configuration\obj\Debug\net9.0\ApiX.Configuration.AssemblyInfo.cs
+D:\Projects\libraries\apix\src\ApiX.Configuration\obj\Debug\net9.0\ApiX.Configuration.csproj.CoreCompileInputs.cache
+D:\Projects\libraries\apix\src\ApiX.Configuration\obj\Debug\net9.0\ApiX.Configuration.sourcelink.json
+D:\Projects\libraries\apix\src\ApiX.Configuration\obj\Debug\net9.0\ApiX.Configuration.xml
+D:\Projects\libraries\apix\src\ApiX.Configuration\bin\Debug\net9.0\ApiX.Configuration.deps.json
+D:\Projects\libraries\apix\src\ApiX.Configuration\bin\Debug\net9.0\ApiX.Configuration.dll
+D:\Projects\libraries\apix\src\ApiX.Configuration\bin\Debug\net9.0\ApiX.Configuration.pdb
+D:\Projects\libraries\apix\src\ApiX.Configuration\bin\Debug\net9.0\ApiX.Configuration.xml
+D:\Projects\libraries\apix\src\ApiX.Configuration\obj\Debug\net9.0\ApiX.Configuration.dll
+D:\Projects\libraries\apix\src\ApiX.Configuration\obj\Debug\net9.0\refint\ApiX.Configuration.dll
+D:\Projects\libraries\apix\src\ApiX.Configuration\obj\Debug\net9.0\ApiX.Configuration.pdb
+D:\Projects\libraries\apix\src\ApiX.Configuration\obj\Debug\net9.0\ref\ApiX.Configuration.dll

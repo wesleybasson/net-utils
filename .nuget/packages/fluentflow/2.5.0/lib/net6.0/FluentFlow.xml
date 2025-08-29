@@ -1,0 +1,1004 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FluentFlow</name>
+    </assembly>
+    <members>
+        <member name="T:FluentFlow.Core.Configuration.AutoRegisteredStepInfo">
+            <summary>
+            Contains information about a step that has been automatically registered to a flow.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.AutoRegisteredStepInfo.StepType">
+            <summary>
+            Gets the type of the step.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.AutoRegisteredStepInfo.FlowType">
+            <summary>
+            Gets the flow type this step is registered to.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.AutoRegisteredStepInfo.Configuration">
+            <summary>
+            Gets the configuration for this step.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.AutoRegisteredStepInfo.Priority">
+            <summary>
+            Gets the priority for ordering. Higher values execute later.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.AutoRegisteredStepInfo.#ctor(System.Type,System.Type,FluentFlow.Core.Configuration.StepConfiguration,System.Int32)">
+            <summary>
+            Initializes a new instance of the AutoRegisteredStepInfo class.
+            </summary>
+            <param name="stepType">The type of the step.</param>
+            <param name="flowType">The flow type this step is registered to.</param>
+            <param name="configuration">The configuration for this step.</param>
+            <param name="priority">The priority for ordering.</param>
+        </member>
+        <member name="T:FluentFlow.Core.Configuration.AutoRegisteredStepsRegistry">
+            <summary>
+            Registry that manages steps that have been automatically registered to flows via the AutoRegisterStepAttribute.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.AutoRegisteredStepsRegistry.Instance">
+            <summary>
+            Gets the singleton instance of the AutoRegisteredStepsRegistry.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.AutoRegisteredStepsRegistry.RegisterStep(System.Type,System.Type,FluentFlow.Core.Configuration.AutoRegisterStepAttribute)">
+            <summary>
+            Registers a step to be automatically added to the specified flow.
+            </summary>
+            <param name="stepType">The type of the step to register.</param>
+            <param name="flowType">The flow type to attach the step to.</param>
+            <param name="attribute">The AutoRegisterStepAttribute containing configuration.</param>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.AutoRegisteredStepsRegistry.GetStepsForFlow(System.Type)">
+            <summary>
+            Gets all auto-registered steps for the specified flow type, ordered by priority.
+            </summary>
+            <param name="flowType">The flow type to get steps for.</param>
+            <returns>An enumerable of AutoRegisteredStepInfo ordered by priority (lower values first).</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.AutoRegisteredStepsRegistry.GetRegisteredFlowTypes">
+            <summary>
+            Gets all registered flow types that have auto-registered steps.
+            </summary>
+            <returns>An enumerable of flow types.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.AutoRegisteredStepsRegistry.Clear">
+            <summary>
+            Clears all registered steps. Primarily used for testing purposes.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.AutoRegisteredStepsRegistry.TotalStepCount">
+            <summary>
+            Gets the total count of auto-registered steps across all flows.
+            </summary>
+        </member>
+        <member name="T:FluentFlow.Core.Configuration.AutoRegisterStepAttribute">
+            <summary>
+            Attribute that enables automatic registration of a flow step to one or more flows.
+            Steps registered via this attribute will be appended after steps defined in DefineSteps().
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.AutoRegisterStepAttribute.AttachTo">
+            <summary>
+            Gets the flow types this step should be attached to.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.AutoRegisterStepAttribute.ExecuteAsync">
+            <summary>
+            Gets or sets whether the step should execute asynchronously.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.AutoRegisterStepAttribute.PreserveContextHistory">
+            <summary>
+            Gets or sets whether the step context should be preserved in history.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.AutoRegisterStepAttribute.Priority">
+            <summary>
+            Gets or sets the priority for soft ordering of auto-registered steps.
+            Higher values execute later. Default is 0.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.AutoRegisterStepAttribute.#ctor(System.Type)">
+            <summary>
+            Initializes a new instance of the AutoRegisterStepAttribute for a single flow.
+            </summary>
+            <param name="attachTo">The flow type to attach this step to.</param>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.AutoRegisterStepAttribute.#ctor(System.Type[])">
+            <summary>
+            Initializes a new instance of the AutoRegisterStepAttribute for multiple flows.
+            </summary>
+            <param name="attachTo">The flow types to attach this step to.</param>
+        </member>
+        <member name="T:FluentFlow.Core.Configuration.FlowStepsRegistry">
+            <summary>
+            Manages the registration and resolution of flow steps.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.FlowStepsRegistry.#ctor(System.IServiceProvider,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FluentFlow.Core.Configuration.FlowStepsRegistry"/> class.
+            </summary>
+            <param name="serviceProvider">The service provider for resolving step dependencies.</param>
+            <param name="logger"></param>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.FlowStepsRegistry.StepsTypes">
+            <summary>
+            Gets the collection of registered step templates.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.FlowStepsRegistry.ResolvedSteps">
+            <summary>
+            Gets the collection of resolved step instances.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.FlowStepsRegistry.AddStep``1(System.Action{FluentFlow.Core.Configuration.StepConfiguration})">
+            <summary>
+            Registers a new step type.
+            </summary>
+            <typeparam name="TStepType">The type of the step to register, which must implement <see cref="T:FluentFlow.Core.Step.IFlowStep"/>.</typeparam>
+            <param name="stepConfiguration">An optional configuration action for the step.</param>
+            <returns>The current instance of <see cref="T:FluentFlow.Core.Configuration.FlowStepsRegistry"/> for method chaining.</returns>
+            <exception cref="T:System.InvalidOperationException">Thrown if the step is already registered, unless the flow is configured to not fail, a warning will be logged instead.</exception>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.FlowStepsRegistry.AddStep(System.Type,System.Action{FluentFlow.Core.Configuration.StepConfiguration})">
+            <summary>
+            Registers a new step type using a Type parameter (for dynamic registration).
+            </summary>
+            <param name="stepType">The type of the step to register, which must implement <see cref="T:FluentFlow.Core.Step.IFlowStep"/>.</param>
+            <param name="stepConfiguration">An optional configuration action for the step.</param>
+            <returns>The current instance of <see cref="T:FluentFlow.Core.Configuration.FlowStepsRegistry"/> for method chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if stepType is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown if stepType does not implement IFlowStep.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown if the step is already registered, unless the flow is configured to not fail, a warning will be logged instead.</exception>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.FlowStepsRegistry.AddStepGroup``2(System.Action{FluentFlow.Core.Configuration.StepConfiguration})">
+            <summary>
+            Registers a group of two-step types.
+            </summary>
+            <typeparam name="TStepType1">The first step type, implementing <see cref="T:FluentFlow.Core.Step.IFlowStep"/>.</typeparam>
+            <typeparam name="TStepType2">The second step type, implementing <see cref="T:FluentFlow.Core.Step.IFlowStep"/>.</typeparam>
+            <param name="stepConfiguration">An optional configuration action for the step group.</param>
+            <returns>The current instance of <see cref="T:FluentFlow.Core.Configuration.FlowStepsRegistry"/> for method chaining.</returns>
+            <exception cref="T:System.InvalidOperationException">Thrown if any step in the group is already registered, unless the flow is configured to not fail, a warning will be logged instead.</exception>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.FlowStepsRegistry.AddStepGroup``3(System.Action{FluentFlow.Core.Configuration.StepConfiguration})">
+            <summary>
+            Registers a group of three step types.
+            </summary>
+            <typeparam name="TStepType1">The first step type, implementing <see cref="T:FluentFlow.Core.Step.IFlowStep"/>.</typeparam>
+            <typeparam name="TStepType2">The second step type, implementing <see cref="T:FluentFlow.Core.Step.IFlowStep"/>.</typeparam>
+            <typeparam name="TStepType3">The third step type, implementing <see cref="T:FluentFlow.Core.Step.IFlowStep"/>.</typeparam>
+            <param name="stepConfiguration">An optional configuration action for the step group.</param>
+            <returns>The current instance of <see cref="T:FluentFlow.Core.Configuration.FlowStepsRegistry"/> for method chaining.</returns>
+            <exception cref="T:System.InvalidOperationException">Thrown if any step in the group is already registered, unless the flow is configured to not fail, a warning will be logged instead.</exception>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.FlowStepsRegistry.ResolveSteps">
+            <summary>
+            Resolves registered steps by instantiating them using the service provider.
+            </summary>
+            <exception cref="T:System.Exception">Thrown if a registered step type is not found in the service provider.</exception>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.FlowStepsRegistry.Clear">
+            <summary>
+            Clears all registered and resolved steps.
+            </summary>
+        </member>
+        <member name="T:FluentFlow.Core.Configuration.FluentFlowExtensions">
+            <summary>
+            Provides extension methods for registering fluent flows and their steps into the service collection.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.FluentFlowExtensions.RegisterFluentFlows(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Boolean,System.Reflection.Assembly[])">
+            <summary>
+            Registers fluent flows and their corresponding steps in the specified assemblies into the DI container.
+            Also scans for and registers steps decorated with AutoRegisterStepAttribute.
+            </summary>
+            <param name="serviceCollection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to add registrations to.</param>
+            <param name="registerByInterface">
+            Determines whether to also register flows by their <see cref="T:FluentFlow.Core.Flow.IFlow`1"/> interface.
+            When <c>true</c>, each flow is registered not only by its concrete type, but also by its interface type.
+            </param>
+            <param name="assemblies">One or more assemblies to scan for flow and flow step types.</param>
+            <returns>The original <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> with added registrations.</returns>
+            <remarks>
+            <para>
+            This method scans the provided assemblies for any types that implement <see cref="T:FluentFlow.Core.Flow.IFlow`1"/> 
+            and registers them as transient services. If <paramref name="registerByInterface"/> is <c>true</c>, 
+            it also registers them under their <see cref="T:FluentFlow.Core.Flow.IFlow`1"/> interface. Additionally, 
+            this method registers types that implement <see cref="T:FluentFlow.Core.Step.IFlowStep"/> as transient services.
+            </para>
+            <para>
+            Each registered flow instance is automatically bound to its core dependencies by calling
+            <see cref="M:FluentFlow.Core.Flow.IFlow.BindCoreDependencies(System.IServiceProvider)"/>. This ensures the flow has access
+            to any required services (such as logging).
+            </para>
+            <para>
+            The flow's context type must have its properties decorated with one of the <see cref="T:FluentFlow.ParameterAttribute"/>
+            family of attributes. If it doesn't, a <see cref="T:FluentFlow.Core.Configuration.FlowConfigurationException"/> is thrown.
+            </para>
+            <para>
+            Steps decorated with <see cref="T:FluentFlow.Core.Configuration.AutoRegisterStepAttribute"/> will be automatically registered
+            to their target flows and appended after steps defined in DefineSteps().
+            </para>
+            </remarks>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.FluentFlowExtensions.ProcessAutoRegisteredSteps(System.Type[],System.Collections.Generic.List{System.Type})">
+            <summary>
+            Processes steps decorated with AutoRegisterStepAttribute and registers them with the AutoRegisteredStepsRegistry.
+            </summary>
+            <param name="assemblyTypes">All types in the assembly being scanned.</param>
+            <param name="flowTypes">The flow types found in the assembly.</param>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.FluentFlowExtensions.ValidateFluentFlowContext(System.Type)">
+            <summary>
+            Ensures that the context type of the given flow has properties decorated with <see cref="T:FluentFlow.ParameterAttribute"/>.
+            Throws <see cref="T:FluentFlow.Core.Configuration.FlowConfigurationException"/> if validation fails.
+            </summary>
+            <param name="fluentFlowType">A concrete flow type implementing <see cref="T:FluentFlow.Core.Flow.IFlow`1"/>.</param>
+            <exception cref="T:FluentFlow.Core.Configuration.FlowConfigurationException">
+            Thrown if any property in the flow context is not decorated with a <see cref="T:FluentFlow.ParameterAttribute"/>.
+            </exception>
+        </member>
+        <member name="T:FluentFlow.Core.Configuration.ResolvedStepItem">
+            <summary>
+            Represents a container for resolved flow steps along with the step configuration that applies to them.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.ResolvedStepItem.#ctor(FluentFlow.Core.Configuration.StepConfiguration)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FluentFlow.Core.Configuration.ResolvedStepItem"/> class
+            with the specified step configuration.
+            </summary>
+            <param name="stepConfiguration">The configuration for the flow steps in this item.</param>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.ResolvedStepItem.StepConfiguration">
+            <summary>
+            Gets the step configuration associated with this resolved step item.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.ResolvedStepItem.ResolvedSteps">
+            <summary>
+            Gets an enumerable of flow steps that have been resolved.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.ResolvedStepItem.Add(FluentFlow.Core.Step.IFlowStep)">
+            <summary>
+            Adds the specified flow step to the resolved steps collection.
+            </summary>
+            <param name="flowStep">The flow step to add.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="flowStep"/> is null.</exception>
+        </member>
+        <member name="T:FluentFlow.Core.Configuration.StepConfiguration">
+            <summary>
+            Represents the configuration for a flow step, allowing customization of its behavior and execution.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.StepConfiguration.ExecuteAsync">
+            <summary>
+            Gets or sets a value indicating whether the step should be executed asynchronously.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.StepConfiguration.OnStepDataContextBound">
+            <summary>
+            Gets or sets an action to be invoked when the step's data context is bound.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.StepConfiguration.OnStepAborted">
+            <summary>
+            Gets or sets an action to be invoked if the step is aborted.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.StepConfiguration.BeforeStepExecute">
+            <summary>
+            Gets or sets an action to be invoked before the step executes.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.StepConfiguration.AfterStepExecute">
+            <summary>
+            Gets or sets an action to be invoked after the step executes.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.StepConfiguration.PreserveStepContextHistory">
+            <summary>
+            Determines whether the step context should be preserved in the history of the flow.
+            <para>
+            If set to <c>true</c>, the step context will be available for access in other steps,
+            specifically within the <see cref="P:FluentFlow.Core.Configuration.StepConfiguration.OnStepDataContextBound"/>, <see cref="P:FluentFlow.Core.Configuration.StepConfiguration.OnStepAborted"/>,
+            <see cref="P:FluentFlow.Core.Configuration.StepConfiguration.BeforeStepExecute"/>, and <see cref="P:FluentFlow.Core.Configuration.StepConfiguration.AfterStepExecute"/> actions.
+            </para>
+            <para>
+            Be cautious with this option, as it can lead to excessive memory usage if the step context is large.
+            </para>
+            <para>
+            If you attempt to access the current step context in another step and this option is set to <c>false</c>, 
+            an exception will be thrown. Use responsibly.
+            </para>
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.StepConfiguration.OnDataContextBound(System.Action{FluentFlow.Core.Step.Context.StepDataContext})">
+            <summary>
+            Configures an action to be invoked when the step's data context is bound.
+            </summary>
+            <param name="onStepDataContextBound">The action to invoke when the data context is bound.</param>
+            <returns>The updated <see cref="T:FluentFlow.Core.Configuration.StepConfiguration"/> instance.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.StepConfiguration.OnAborted(System.Action{FluentFlow.Core.Step.IFlowStep})">
+            <summary>
+            Configures an action to be invoked if the step is aborted.
+            </summary>
+            <param name="onStepAborted">The action to invoke when the step is aborted.</param>
+            <returns>The updated <see cref="T:FluentFlow.Core.Configuration.StepConfiguration"/> instance.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.StepConfiguration.BeforeExecute(System.Action{FluentFlow.Core.Step.IFlowStep})">
+            <summary>
+            Configures an action to be invoked before the step executes.
+            </summary>
+            <param name="beforeStepExecute">The action to invoke before the step executes.</param>
+            <returns>The updated <see cref="T:FluentFlow.Core.Configuration.StepConfiguration"/> instance.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.StepConfiguration.AfterExecute(System.Action{FluentFlow.Core.Step.IFlowStep})">
+            <summary>
+            Configures an action to be invoked after the step executes.
+            </summary>
+            <param name="afterStepExecute">The action to invoke after the step executes.</param>
+            <returns>The updated <see cref="T:FluentFlow.Core.Configuration.StepConfiguration"/> instance.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.StepConfiguration.PreserveContextHistory(System.Boolean)">
+            <summary>
+            Configures whether the step context should be preserved in the flow's context history.
+            </summary>
+            <param name="preserveStepContextHistory">A value indicating whether to preserve the step context history.</param>
+            <returns>The updated <see cref="T:FluentFlow.Core.Configuration.StepConfiguration"/> instance.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.StepConfiguration.ExecuteAsynchronously(System.Boolean)">
+            <summary>
+            Configures whether the step should execute asynchronously.
+            </summary>
+            <param name="executeAsync">A value indicating whether the step should execute asynchronously.</param>
+            <returns>The updated <see cref="T:FluentFlow.Core.Configuration.StepConfiguration"/> instance.</returns>
+        </member>
+        <member name="T:FluentFlow.Core.Configuration.StepTemplate">
+            <summary>
+            Represents a template for defining flow steps along with their configuration.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.StepTemplate.Steps">
+            <summary>
+            Gets an enumeration of the step <see cref="T:System.Type"/> objects that have been added to this template.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Configuration.StepTemplate.Configuration">
+            <summary>
+            Gets the configuration for the steps in this template.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Configuration.StepTemplate.Add(FluentFlow.Core.Configuration.StepConfiguration,System.Type[])">
+            <summary>
+            Adds one or more step <see cref="T:System.Type"/> objects to this template, optionally assigning a step configuration.
+            </summary>
+            <param name="stepConfiguration">
+            The <see cref="T:FluentFlow.Core.Configuration.StepConfiguration"/> to apply to the steps. This parameter is optional.
+            </param>
+            <param name="types">
+            One or more step <see cref="T:System.Type"/> objects to be added to the template.
+            </param>
+            <returns>
+            The current <see cref="T:FluentFlow.Core.Configuration.StepTemplate"/> instance, enabling fluent chaining.
+            </returns>
+        </member>
+        <member name="F:FluentFlow.Core.Flow.Context.FlowContextBase.StepContextHistory">
+            <summary>
+            A dictionary to store the history of the step context objects.
+            The context objects are stored in the dictionary if the <see cref="P:FluentFlow.Core.Configuration.StepConfiguration.PreserveStepContextHistory"/> is set to true.
+            </summary>
+        </member>
+        <member name="T:FluentFlow.Core.Flow.Exceptions.AbortException">
+            <summary>
+            Represents an exception that can be thrown to abort a flow.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.Exceptions.AbortException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FluentFlow.Core.Flow.Exceptions.AbortException"/> class with an optional error message.
+            </summary>
+            <param name="message">The optional error message.</param>
+        </member>
+        <member name="T:FluentFlow.Core.Flow.FlowBase`1">
+            <summary>
+            Represents an abstract base class for flows that handle a flow context of type <typeparamref name="TFlowContext"/>.
+            </summary>
+            <typeparam name="TFlowContext">The type of the flow context that extends <see cref="T:FluentFlow.Core.Flow.Context.FlowContextBase"/>.</typeparam>
+        </member>
+        <member name="F:FluentFlow.Core.Flow.FlowBase`1._flowStepsRegistry">
+            <summary>
+            Holds the registry for flow steps.
+            </summary>
+        </member>
+        <member name="F:FluentFlow.Core.Flow.FlowBase`1._flowExecutionConfiguration">
+            <summary>
+            Configuration object that holds various flow execution settings.
+            </summary>
+        </member>
+        <member name="F:FluentFlow.Core.Flow.FlowBase`1.Logger">
+            <summary>
+            Logger for the flow context.
+            </summary>
+        </member>
+        <member name="F:FluentFlow.Core.Flow.FlowBase`1.Context">
+            <summary>
+            The current context of the flow.
+            </summary>
+        </member>
+        <member name="E:FluentFlow.Core.Flow.FlowBase`1.FlowInitialized">
+            <summary>
+            Occurs when the flow is initialized.
+            </summary>
+        </member>
+        <member name="E:FluentFlow.Core.Flow.FlowBase`1.BeforeStepExecuted">
+            <summary>
+            Occurs just before a flow step is executed.
+            </summary>
+        </member>
+        <member name="E:FluentFlow.Core.Flow.FlowBase`1.AfterStepExecuted">
+            <summary>
+            Occurs right after a flow step has finished executing.
+            </summary>
+        </member>
+        <member name="E:FluentFlow.Core.Flow.FlowBase`1.BeforeFlowExecuted">
+            <summary>
+            Occurs just before the entire flow execution starts.
+            </summary>
+        </member>
+        <member name="E:FluentFlow.Core.Flow.FlowBase`1.AfterFlowExecuted">
+            <summary>
+            Occurs right after the entire flow has finished executing.
+            </summary>
+        </member>
+        <member name="E:FluentFlow.Core.Flow.FlowBase`1.FlowError">
+            <summary>
+            Occurs when an error happens during the flow execution.
+            </summary>
+        </member>
+        <member name="E:FluentFlow.Core.Flow.FlowBase`1.FlowGracefullyStopped">
+            <summary>
+            Occurs when the flow is stopped gracefully (i.e., without throwing unhandled exceptions).
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowBase`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FluentFlow.Core.Flow.FlowBase`1"/> class.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Flow.FlowBase`1.Id">
+            <summary>
+            Gets the unique identifier of the flow.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Flow.FlowBase`1.State">
+            <summary>
+            Gets the current state of the flow.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowBase`1.Execute(`0,System.Action{FluentFlow.Core.Flow.FlowExecutionConfiguration{`0}})">
+            <summary>
+            Executes the flow with the provided context and an optional flow configuration callback.
+            </summary>
+            <param name="context">An instance of <typeparamref name="TFlowContext"/> to be used as the flow context.</param>
+            <param name="flowExecutionConfiguration">
+            An optional action to configure <see cref="T:FluentFlow.Core.Flow.FlowExecutionConfiguration`1"/> before execution.
+            </param>
+            <returns>A task representing the asynchronous operation.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="context"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown if the flow is not initialized correctly.</exception>
+            <exception cref="T:FluentFlow.Core.Flow.Exceptions.GracefullyStopFlowException">Thrown to indicate the flow should stop gracefully.</exception>
+            <exception cref="T:FluentFlow.Core.Flow.Exceptions.AbortException">Thrown to indicate the flow should be aborted.</exception>
+            <exception cref="T:System.Exception">Thrown when an error occurs during execution if silent fail is not configured.</exception>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowBase`1.Execute(System.Action{FluentFlow.Core.Flow.FlowExecutionConfiguration{`0}})">
+            <summary>
+            Executes the flow using a new instance of <typeparamref name="TFlowContext"/>.
+            </summary>
+            <param name="flowExecutionConfiguration">
+            An optional action to configure <see cref="T:FluentFlow.Core.Flow.FlowExecutionConfiguration`1"/> before execution.
+            </param>
+            <returns>A task representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowBase`1.Execute">
+            <summary>
+            Executes the flow using a new instance of <typeparamref name="TFlowContext"/>.
+            </summary>
+            <returns>A task representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowBase`1.BindCoreDependencies(System.IServiceProvider)">
+            <summary>
+            Binds the core dependencies for the flow. In particular, sets up the logger and initializes the flow steps registry.
+            </summary>
+            <param name="serviceProvider">The service provider used to retrieve the logger and other services.</param>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowBase`1.AccessContext``1">
+            <summary>
+            Provides access to the context by converting the flow's context to the specified type.
+            </summary>
+            <typeparam name="TContext">A type that extends <see cref="T:FluentFlow.Core.Flow.Context.FlowContextBase"/>.</typeparam>
+            <returns>An instance of <typeparamref name="TContext"/>.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowBase`1.UnsubscribeFromAllEvents">
+            <summary>
+            Unsubscribes from all events to prevent memory leaks or unexpected event calls.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowBase`1.DefineSteps(FluentFlow.Core.Configuration.FlowStepsRegistry)">
+            <summary>
+            Defines the steps for this flow by configuring the provided <see cref="T:FluentFlow.Core.Configuration.FlowStepsRegistry"/>.
+            Must be overridden by derived classes.
+            </summary>
+            <param name="stepsRegistry">The registry where steps are defined.</param>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowBase`1.AppendAutoRegisteredSteps">
+            <summary>
+            Appends steps that have been automatically registered to this flow via the AutoRegisterStepAttribute.
+            These steps are added after user-defined steps and ordered by priority.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowBase`1.SafeExecuteStep(System.Func{System.Threading.Tasks.Task},FluentFlow.Core.Step.IFlowStep,FluentFlow.Core.Configuration.StepConfiguration)">
+            <summary>
+            Safely executes a flow step with optional after-step logic.
+            Handles <see cref="T:FluentFlow.Core.Step.Exceptions.StepException"/> by logging the error and calling <see cref="P:FluentFlow.Core.Configuration.StepConfiguration.OnStepAborted"/>.
+            </summary>
+            <param name="stepExecution">The asynchronous operation representing the step execution.</param>
+            <param name="flowStep">The flow step being executed.</param>
+            <param name="stepConfiguration">The configuration object that defines callback actions for the step.</param>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowBase`1.ExecuteStepInternal(`0,FluentFlow.Core.Step.IFlowStep,FluentFlow.Core.Configuration.StepConfiguration)">
+            <summary>
+            Executes a single flow step by invoking <see cref="E:FluentFlow.Core.Flow.FlowBase`1.BeforeStepExecuted"/> and <see cref="E:FluentFlow.Core.Flow.FlowBase`1.AfterStepExecuted"/> events,
+            applying any step-specific logic in <see cref="M:FluentFlow.Core.Flow.FlowBase`1.SafeExecuteStep(System.Func{System.Threading.Tasks.Task},FluentFlow.Core.Step.IFlowStep,FluentFlow.Core.Configuration.StepConfiguration)"/>.
+            </summary>
+            <param name="context">The flow context.</param>
+            <param name="flowStep">The flow step being executed.</param>
+            <param name="stepConfiguration">The configuration object for the flow step.</param>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowBase`1.ExecuteFlowSteps(`0,System.Collections.Generic.List{FluentFlow.Core.Configuration.ResolvedStepItem})">
+            <summary>
+            Executes the flow steps, handling both synchronous and asynchronous batches of steps.
+            </summary>
+            <param name="context">The context of the flow.</param>
+            <param name="asyncBatch">A collection of steps to be executed asynchronously.</param>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowBase`1.DeepClone(System.Object,System.Type)">
+            <summary>
+            Creates a deep clone of the specified object by serializing and deserializing it as JSON.
+            </summary>
+            <param name="obj">The object to clone.</param>
+            <param name="type">The <see cref="T:System.Type"/> of the object being cloned.</param>
+            <returns>A new instance of the object, fully cloned from <paramref name="obj"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown if <paramref name="obj"/> or <paramref name="type"/> is null.
+            </exception>
+        </member>
+        <member name="P:FluentFlow.Core.Flow.FlowBase`1.Mapper">
+            <summary>
+            Gets the quick mapper instance for this flow.
+            </summary>
+        </member>
+        <member name="T:FluentFlow.Core.Flow.FlowControl">
+            <summary>
+            Provides mechanisms for controlling the flow of a process, including aborting or stopping flows and steps gracefully.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowControl.AbortFlow(System.String,System.Action{System.String})">
+            <summary>
+            Aborts the entire flow, optionally invoking a callback with a message before throwing an <see cref="T:FluentFlow.Core.Flow.Exceptions.AbortException"/>.
+            </summary>
+            <param name="message">An optional message describing the reason for aborting the flow.</param>
+            <param name="onAbortFlow">An optional action to execute before aborting the flow.</param>
+            <exception cref="T:FluentFlow.Core.Flow.Exceptions.AbortException">Always thrown to indicate the flow has been aborted.</exception>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowControl.AbortStep(System.String,System.Action{System.String})">
+            <summary>
+            Aborts the current step, optionally invoking a callback with a message before throwing a <see cref="T:FluentFlow.Core.Step.Exceptions.StepException"/>.
+            Note that this does not abort the entire flow, only the current step.
+            </summary>
+            <param name="message">An optional message describing the reason for aborting the step.</param>
+            <param name="onAbortStep">An optional action to execute before aborting the step.</param>
+            <exception cref="T:FluentFlow.Core.Step.Exceptions.StepException">Always thrown to indicate the step has been aborted.</exception>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowControl.StopFlow(System.String,System.Action{System.String})">
+            <summary>
+            Stops the flow gracefully, meaning it does not bubble up any exception that might have been thrown inside of it,
+            optionally invoking a callback with a message before throwing a <see cref="T:FluentFlow.Core.Flow.Exceptions.GracefullyStopFlowException"/>.
+            </summary>
+            <param name="message">An optional message describing the reason for stopping the flow.</param>
+            <param name="onStopFlow">An optional action to execute before stopping the flow.</param>
+            <exception cref="T:FluentFlow.Core.Flow.Exceptions.GracefullyStopFlowException">Always thrown to indicate the flow has been stopped gracefully.</exception>
+        </member>
+        <member name="T:FluentFlow.Core.Flow.FlowExecutionConfiguration`1">
+            <summary>
+            Configures the execution behavior of a flow, including context, failure handling, 
+            step registration rules, and event subscriptions.
+            </summary>
+            <typeparam name="TFlowContext">The type of flow context, which must derive from <see cref="T:FluentFlow.Core.Flow.Context.FlowContextBase"/> and have a parameterless constructor.</typeparam>
+        </member>
+        <member name="P:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.FlowContextCallback">
+            <summary>
+            Gets the callback function used to create a new instance of <typeparamref name="TFlowContext"/>.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.FailSilently">
+            <summary>
+            If set to <c>true</c>, the <see cref="T:FluentFlow.Core.Flow.IFlow`1"/> will fail silently if it is aborted.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.FailOnDuplicateStepRegistration">
+            <summary>
+            If set to <c>true</c>, the flow will fail when a duplicate step registration is detected.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.StepDefinitionOverrideCallback">
+            <summary>
+            Gets the callback function for overriding step definitions in the flow.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.OnFlowFailedAsync">
+            <summary>
+            Gets the asynchronous callback function executed when the flow fails.
+            Defaults to a completed task.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.OnFlowFailed">
+            <summary>
+            Gets the synchronous callback function executed when the flow fails.
+            Defaults to an empty action.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.OnFlowSucceededAsync">
+            <summary>
+            Gets the asynchronous callback function executed when the flow succeeds.
+            Defaults to a completed task.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.OnFlowSucceeded">
+            <summary>
+            Gets the synchronous callback function executed when the flow succeeds.
+            Defaults to an empty action.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.DontAutomaticallyUnsubscribeFromAllEvents">
+            <summary>
+            If set to <c>true</c>, the executing <see cref="T:FluentFlow.Core.Flow.IFlow`1"/> will not automatically unsubscribe from its events.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.OverrideStepDefinition(System.Action{FluentFlow.Core.Configuration.FlowStepsRegistry})">
+            <summary>
+            Overrides the step registrations from the <see cref="T:FluentFlow.Core.Flow.IFlow`1"/>.
+            </summary>
+            <param name="stepDefinitionOverride">Callback function exposing the <see cref="T:FluentFlow.Core.Configuration.FlowStepsRegistry"/> for step customization.</param>
+            <returns>The current instance of <see cref="T:FluentFlow.Core.Flow.FlowExecutionConfiguration`1"/> for method chaining.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.WithContext(System.Func{`0})">
+            <summary>
+            Defines the callback function for creating a flow context instance.
+            </summary>
+            <param name="defineContext">A function that returns an instance of <typeparamref name="TFlowContext"/>.</param>
+            <returns>The current instance of <see cref="T:FluentFlow.Core.Flow.FlowExecutionConfiguration`1"/> for method chaining.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.MustFailSilently">
+            <summary>
+            Configures the flow to fail silently if aborted.
+            </summary>
+            <returns>The current instance of <see cref="T:FluentFlow.Core.Flow.FlowExecutionConfiguration`1"/> for method chaining.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.MustFailOnDuplicateStepRegistration">
+            <summary>
+            Configures the flow to fail on duplicate step registration.
+            </summary>
+            <returns>The current instance of <see cref="T:FluentFlow.Core.Flow.FlowExecutionConfiguration`1"/> for method chaining.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.MustNotAutomaticallyUnsubscribeFromAllEvents">
+            <summary>
+            Prevents the automatic unsubscription of the flow from all events.
+            </summary>
+            <returns>The current instance of <see cref="T:FluentFlow.Core.Flow.FlowExecutionConfiguration`1"/> for method chaining.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.OnFailedAsync(System.Func{`0,System.Threading.Tasks.Task})">
+            <summary>
+            Sets an asynchronous callback function to be executed when the flow fails.
+            </summary>
+            <param name="onFailed">A function to handle flow failure asynchronously.</param>
+            <returns>The current instance of <see cref="T:FluentFlow.Core.Flow.FlowExecutionConfiguration`1"/> for method chaining.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.OnFailed(System.Action{`0})">
+            <summary>
+            Sets a synchronous callback function to be executed when the flow fails.
+            </summary>
+            <param name="onFailed">An action to handle flow failure synchronously.</param>
+            <returns>The current instance of <see cref="T:FluentFlow.Core.Flow.FlowExecutionConfiguration`1"/> for method chaining.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.OnSucceededAsync(System.Func{`0,System.Threading.Tasks.Task})">
+            <summary>
+            Sets an asynchronous callback function to be executed when the flow succeeds.
+            </summary>
+            <param name="onSucceeded">A function to handle flow success asynchronously.</param>
+            <returns>The current instance of <see cref="T:FluentFlow.Core.Flow.FlowExecutionConfiguration`1"/> for method chaining.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.FlowExecutionConfiguration`1.OnSucceeded(System.Action{`0})">
+            <summary>
+            Sets a synchronous callback function to be executed when the flow succeeds.
+            </summary>
+            <param name="onSucceeded">An action to handle flow success synchronously.</param>
+            <returns>The current instance of <see cref="T:FluentFlow.Core.Flow.FlowExecutionConfiguration`1"/> for method chaining.</returns>
+        </member>
+        <member name="T:FluentFlow.Core.Flow.FlowState">
+            <summary>
+            Represents the possible states of a flow.
+            </summary>
+        </member>
+        <member name="F:FluentFlow.Core.Flow.FlowState.Succeeded">
+            <summary>
+            Indicates that the flow has executed and completed successfully.
+            </summary>
+        </member>
+        <member name="F:FluentFlow.Core.Flow.FlowState.Failed">
+            <summary>
+            Indicates that the flow has executed but encountered a failure.
+            </summary>
+        </member>
+        <member name="T:FluentFlow.Core.Flow.IFlow">
+            <summary>
+            Represents the base interface for a flow that can be executed.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.IFlow.Execute">
+            <summary>
+            Executes the flow asynchronously.
+            </summary>
+            <returns>A task representing the asynchronous execution.</returns>
+        </member>
+        <member name="E:FluentFlow.Core.Flow.IFlow.FlowInitialized">
+            <summary>
+            Occurs when the flow is initialized.
+            </summary>
+        </member>
+        <member name="E:FluentFlow.Core.Flow.IFlow.BeforeStepExecuted">
+            <summary>
+            Occurs just before a flow step is executed.
+            </summary>
+        </member>
+        <member name="E:FluentFlow.Core.Flow.IFlow.AfterStepExecuted">
+            <summary>
+            Occurs right after a flow step has finished executing.
+            </summary>
+        </member>
+        <member name="E:FluentFlow.Core.Flow.IFlow.BeforeFlowExecuted">
+            <summary>
+            Occurs just before the flow execution starts.
+            </summary>
+        </member>
+        <member name="E:FluentFlow.Core.Flow.IFlow.AfterFlowExecuted">
+            <summary>
+            Occurs right after the flow has finished executing.
+            </summary>
+        </member>
+        <member name="E:FluentFlow.Core.Flow.IFlow.FlowError">
+            <summary>
+            Occurs when an error happens during the flow execution.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.IFlow.BindCoreDependencies(System.IServiceProvider)">
+            <summary>
+            Binds the core dependencies (e.g., logger, service provider).
+            </summary>
+            <param name="serviceProvider">The service provider used to resolve dependencies.</param>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.IFlow.AccessContext``1">
+            <summary>
+            Provides access to the flow context by converting it to the specified type <typeparamref name="TContext"/>.
+            </summary>
+            <typeparam name="TContext">A type that extends <see cref="T:FluentFlow.Core.Flow.Context.FlowContextBase"/>.</typeparam>
+            <returns>An instance of <typeparamref name="TContext"/>.</returns>
+        </member>
+        <member name="T:FluentFlow.Core.Flow.IFlow`1">
+            <summary>
+            Defines a flow interface for a specific flow context type <typeparamref name="TFlowContextBase"/>.
+            </summary>
+            <typeparam name="TFlowContextBase">A type that extends <see cref="T:FluentFlow.Core.Flow.Context.FlowContextBase"/>.</typeparam>
+        </member>
+        <member name="P:FluentFlow.Core.Flow.IFlow`1.Id">
+            <summary>
+            Gets the unique identifier of the flow.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Flow.IFlow`1.State">
+            <summary>
+            Gets the current state of the flow.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.IFlow`1.Execute(`0,System.Action{FluentFlow.Core.Flow.FlowExecutionConfiguration{`0}})">
+            <summary>
+            Executes the flow with the provided context and an optional flow configuration action.
+            </summary>
+            <param name="context">The flow context instance to use during execution.</param>
+            <param name="flowExecutionConfiguration">An optional configuration callback for flow execution.</param>
+            <returns>A task representing the asynchronous execution.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Flow.IFlow`1.Execute(System.Action{FluentFlow.Core.Flow.FlowExecutionConfiguration{`0}})">
+            <summary>
+            Executes the flow using a new instance of <typeparamref name="TFlowContextBase"/>, with an optional configuration action.
+            </summary>
+            <param name="flowExecutionConfiguration">An optional configuration callback for flow execution.</param>
+            <returns>A task representing the asynchronous execution.</returns>
+        </member>
+        <member name="T:FluentFlow.Core.Step.Context.StepDataContext">
+            <summary>
+            Represents the base class for step data contexts within a flow, providing mechanisms for validation,
+            context access, and integration with logging and step history lookup.
+            </summary>
+        </member>
+        <member name="F:FluentFlow.Core.Step.Context.StepDataContext.Logger">
+            <summary>
+            The logger instance used for logging within the step context.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Step.Context.StepDataContext.StepHistoryLookupCallBack">
+            <summary>
+            A callback function to look up step contexts in the history by type.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Step.Context.StepDataContext.Validate">
+            <summary>
+            Validates the step data context to ensure it meets required conditions.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Step.Context.StepDataContext.Access``1(System.Boolean)">
+            <summary>
+            Accesses the context of a step, optionally looking it up in the step history.
+            </summary>
+            <typeparam name="T">The type of the context to access.</typeparam>
+            <param name="peekIntoStepContextHistory">
+            If <c>true</c>, the method will look up the context in the step history.
+            If <c>false</c>, the current step context is returned.
+            </param>
+            <returns>The context of the step if found; otherwise, <c>null</c>.</returns>
+            <exception cref="T:System.InvalidOperationException">
+            Thrown when <paramref name="peekIntoStepContextHistory"/> is <c>true</c> and the context of the specified type 
+            is not found in the step history. This may occur if the owning step was not configured to preserve its context.
+            </exception>
+        </member>
+        <member name="M:FluentFlow.Core.Step.Context.StepDataContext.BindFlowLogger(Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Binds a logger to the flow context for logging purposes.
+            </summary>
+            <param name="flowLogger">The logger to bind to the flow context.</param>
+        </member>
+        <member name="M:FluentFlow.Core.Step.Context.StepDataContext.BindStepHistoryLookupCallBack(System.Func{System.Type,System.Object})">
+            <summary>
+            Binds a callback function for looking up step contexts in the history by type.
+            </summary>
+            <param name="stepHistoryLookupCallBack">The callback function to use for step history lookups.</param>
+        </member>
+        <member name="T:FluentFlow.Core.Step.FlowStepBase`1">
+            <summary>
+            Provides a base implementation for a flow step with a specific data context.
+            </summary>
+            <typeparam name="TStepDataContext">The type of the data context specific to this step.</typeparam>
+        </member>
+        <member name="P:FluentFlow.Core.Step.FlowStepBase`1.Id">
+            <summary>
+            Gets the unique identifier for this flow step instance.
+            </summary>
+        </member>
+        <member name="F:FluentFlow.Core.Step.FlowStepBase`1.Context">
+            <summary>
+            The data context for this step.
+            </summary>
+        </member>
+        <member name="F:FluentFlow.Core.Step.FlowStepBase`1.Logger">
+            <summary>
+            The logger for flow-related messages.
+            </summary>
+        </member>
+        <member name="F:FluentFlow.Core.Step.FlowStepBase`1.Mapper">
+            <summary>
+            The object mapper to map data context objects.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Step.FlowStepBase`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FluentFlow.Core.Step.FlowStepBase`1"/> class.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Step.FlowStepBase`1.Execute(System.Object,System.Action{FluentFlow.Core.Step.Context.StepDataContext},System.Threading.CancellationToken)">
+            <summary>
+            Executes the flow step asynchronously.
+            </summary>
+            <param name="context">The execution context.</param>
+            <param name="onDataContextBound">An optional callback invoked when the data context is bound.</param>
+            <param name="cancellationToken">A token for cancelling the execution.</param>
+        </member>
+        <member name="M:FluentFlow.Core.Step.FlowStepBase`1.BindLogger(Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Binds a logger to this flow step.
+            </summary>
+            <param name="logger">The logger to bind.</param>
+        </member>
+        <member name="M:FluentFlow.Core.Step.FlowStepBase`1.AccessContext">
+            <summary>
+            Provides access to the data context as an object.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FluentFlow.Core.Step.FlowStepBase`1.OnExecute(System.Threading.CancellationToken)">
+            <summary>
+            When overridden in a derived class, performs the step's execution logic.
+            </summary>
+            <param name="cancellationToken">A token for cancelling the execution.</param>
+        </member>
+        <member name="M:FluentFlow.Core.Step.FlowStepBase`1.MapContext(System.Object,AutoMapper.IMapper)">
+            <summary>
+            Maps the context back to the original object context.
+            </summary>
+            <param name="context">The original object context.</param>
+            <param name="mapper">The mapper to use for the operation.</param>
+        </member>
+        <member name="T:FluentFlow.Core.Step.IFlowStep">
+            <summary>
+            Represents a step in a flow.
+            </summary>
+        </member>
+        <member name="P:FluentFlow.Core.Step.IFlowStep.Id">
+            <summary>
+            Gets the unique identifier for this flow step.
+            </summary>
+        </member>
+        <member name="M:FluentFlow.Core.Step.IFlowStep.Execute(System.Object,System.Action{FluentFlow.Core.Step.Context.StepDataContext},System.Threading.CancellationToken)">
+            <summary>
+            Executes the flow step with an optional context, optional callback for when a data context is bound,
+            and an optional cancellation token.
+            </summary>
+            <param name="context">The context object passed to the step; may be <c>null</c>.</param>
+            <param name="onDataContextBound">An optional callback invoked when the step data context is bound.</param>
+            <param name="cancellationToken">An optional token for canceling the operation.</param>
+            <returns>A task representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Step.IFlowStep.BindLogger(Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Binds the specified logger to this flow step.
+            </summary>
+            <param name="logger">The logger to bind to this flow step.</param>
+        </member>
+        <member name="M:FluentFlow.Core.Step.IFlowStep.AccessContext``1(System.Boolean)">
+            <summary>
+            Retrieves the step context as a strongly-typed instance of <typeparamref name="TFlowStepContext"/>.
+            </summary>
+            <typeparam name="TFlowStepContext">The type of the step data context.</typeparam>
+            <param name="lookInStepHistory">
+            If <c>true</c>, attempts to retrieve the context from the step history instead of the current context.
+            </param>
+            <returns>An instance of <typeparamref name="TFlowStepContext"/>.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Step.IFlowStep.AccessContext">
+            <summary>
+            Retrieves the step context as an <see cref="T:System.Object"/>.
+            </summary>
+            <returns>An <see cref="T:System.Object"/> representing the step context.</returns>
+        </member>
+        <member name="M:FluentFlow.Core.Step.IFlowStep.BindStepHistory(System.Collections.Generic.Dictionary{System.Type,System.Object})">
+            <summary>
+            Binds the provided step history to this step, enabling it to retrieve
+            and utilize historical step context data.
+            </summary>
+            <param name="stepHistory">
+            A dictionary containing step contexts keyed by their <see cref="T:System.Type"/>.
+            </param>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,94 @@
+<Project>
+
+  <!--
+    Directory.Build.targets runs AFTER project evaluation.
+    We capture CI environment variables, normalize them,
+    and stamp common metadata into assemblies/packages.
+  -->
+
+  <!-- 2.1 Detect CI providers & normalize variables -->
+  <PropertyGroup Label="CI Environment Detection">
+    <!-- Azure DevOps -->
+    <IsAzureDevOps>$([MSBuild]::ValueOrDefault('$(TF_BUILD)',''))</IsAzureDevOps>
+    <!-- GitHub Actions -->
+    <IsGitHubActions>$([MSBuild]::ValueOrDefault('$(GITHUB_ACTIONS)',''))</IsGitHubActions>
+
+    <!-- Raw env vars -->
+    <ENV_BuildNumber>$(BUILD_BUILDNUMBER)</ENV_BuildNumber>            <!-- ADO -->
+    <ENV_SourceBranch>$(BUILD_SOURCEBRANCH)</ENV_SourceBranch>         <!-- ADO -->
+    <ENV_SourceVersion>$(BUILD_SOURCEVERSION)</ENV_SourceVersion>      <!-- ADO -->
+    <ENV_RepoName>$(BUILD_REPOSITORY_NAME)</ENV_RepoName>              <!-- ADO -->
+
+    <GHA_Ref>$(GITHUB_REF)</GHA_Ref>                                   <!-- GHA -->
+    <GHA_Sha>$(GITHUB_SHA)</GHA_Sha>                                   <!-- GHA -->
+    <GHA_Repo>$(GITHUB_REPOSITORY)</GHA_Repo>                          <!-- GHA -->
+    <GHA_RunNumber>$(GITHUB_RUN_NUMBER)</GHA_RunNumber>                <!-- GHA -->
+
+    <!-- Fallbacks for local/dev builds -->
+    <NowUtc>$([System.DateTime]::UtcNow.ToString('yyyy-MM-ddTHH:mm:ssZ'))</NowUtc>
+    <UserName>$([System.Environment]::UserName)</UserName>
+    <MachineName>$([System.Environment]::MachineName)</MachineName>
+  </PropertyGroup>
+
+  <!-- 2.2 Normalized metadata -->
+  <PropertyGroup Label="Normalized Build Metadata">
+    <!-- Branch -->
+    <RepositoryBranch Condition="'$(IsAzureDevOps)' != ''">$(ENV_SourceBranch)</RepositoryBranch>
+    <RepositoryBranch Condition="'$(RepositoryBranch)' == '' and '$(IsGitHubActions)' != ''">$(GHA_Ref)</RepositoryBranch>
+    <RepositoryBranch Condition="'$(RepositoryBranch)' == ''">local</RepositoryBranch>
+
+    <!-- Commit -->
+    <RepositoryCommit Condition="'$(IsAzureDevOps)' != ''">$(ENV_SourceVersion)</RepositoryCommit>
+    <RepositoryCommit Condition="'$(RepositoryCommit)' == '' and '$(IsGitHubActions)' != ''">$(GHA_Sha)</RepositoryCommit>
+    <RepositoryCommit Condition="'$(RepositoryCommit)' == ''">dev</RepositoryCommit>
+
+    <!-- Build number -->
+    <BuildNumber Condition="'$(IsAzureDevOps)' != ''">$(ENV_BuildNumber)</BuildNumber>
+    <BuildNumber Condition="'$(BuildNumber)' == '' and '$(IsGitHubActions)' != ''">$(GHA_RunNumber)</BuildNumber>
+    <BuildNumber Condition="'$(BuildNumber)' == ''">0</BuildNumber>
+
+    <!-- Repo name (useful for stamping) -->
+    <RepositoryName Condition="'$(IsAzureDevOps)' != ''">$(ENV_RepoName)</RepositoryName>
+    <RepositoryName Condition="'$(RepositoryName)' == '' and '$(IsGitHubActions)' != ''">$(GHA_Repo)</RepositoryName>
+    <RepositoryName Condition="'$(RepositoryName)' == ''">ApiX</RepositoryName>
+
+    <!-- Build date -->
+    <BuildDateUtc>$(NowUtc)</BuildDateUtc>
+  </PropertyGroup>
+
+  <!-- 2.3 Stamp into assembly & package metadata -->
+  <PropertyGroup Label="Stamp Assembly / Package">
+    <!-- InformationalVersion shows up in file properties and NuGet -->
+    <!-- It concatenates your Version (from Versions.props) with CI metadata -->
+    <InformationalVersion>
+      $(Version)
+      +branch=$(RepositoryBranch)
+      +commit=$(RepositoryCommit)
+      +build=$(BuildNumber)
+      +built=$(BuildDateUtc)
+    </InformationalVersion>
+
+    <!-- Optional release notes auto-fill -->
+    <PackageReleaseNotes>
+      Branch: $(RepositoryBranch)
+      Commit: $(RepositoryCommit)
+      Build:  $(BuildNumber)
+      Date:   $(BuildDateUtc)
+      Repo:   $(RepositoryName)
+    </PackageReleaseNotes>
+
+    <!-- Also publish repo URL in PDB (already enabled in Versions.props, but ensuring here) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Treat CI builds as deterministic (again reinforced) -->
+    <ContinuousIntegrationBuild Condition="'$(ContinuousIntegrationBuild)' == '' and ('$(IsAzureDevOps)' != '' or '$(IsGitHubActions)' != '')">true</ContinuousIntegrationBuild>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+
+  <!-- 2.4 Write a summary line during build -->
+  <Target Name="PrintApiXBuildStamp" AfterTargets="Build" Condition="'$(DesignTimeBuild)' != 'true'">
+    <Message Importance="high" Text="ApiX Build: v$(Version) • Branch=$(RepositoryBranch) • Commit=$(RepositoryCommit) • Build=$(BuildNumber) • $(BuildDateUtc)" />
+  </Target>
+
+</Project>

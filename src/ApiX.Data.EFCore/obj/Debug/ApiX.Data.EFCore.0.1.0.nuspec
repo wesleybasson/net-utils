@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>ApiX.Data.EFCore</id>
+    <version>0.1.0</version>
+    <authors>ApiX Team</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <icon>apix-icon.png</icon>
+    <projectUrl>https://www.wmbonline.co.za/</projectUrl>
+    <description>Package Description</description>
+    <releaseNotes>Branch: main
+      Commit: dev
+      Build:  0
+      Date:   2025-08-29T08:43:02Z
+      Repo:   ApiX</releaseNotes>
+    <tags>aspnetcore webapi apix validation observability security</tags>
+    <repository type="git" url="https://github.com/wesleybasson/net-utils" branch="main" commit="dev" />
+    <dependencies>
+      <group targetFramework="net9.0">
+        <dependency id="ApiX.Abstractions" version="0.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.EntityFrameworkCore" version="9.0.7" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="9.0.7" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Options" version="9.0.7" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="D:\Projects\libraries\apix\src\ApiX.Data.EFCore\bin\Debug\net9.0\ApiX.Data.EFCore.dll" target="lib\net9.0\ApiX.Data.EFCore.dll" />
+    <file src="D:\Projects\libraries\apix\src\ApiX.Data.EFCore\bin\Debug\net9.0\ApiX.Data.EFCore.xml" target="lib\net9.0\ApiX.Data.EFCore.xml" />
+    <file src="D:\Projects\libraries\apix\build\assets\apix-icon.png" target="apix-icon.png" />
+  </files>
+</package>

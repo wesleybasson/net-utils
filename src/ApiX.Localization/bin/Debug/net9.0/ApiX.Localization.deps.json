@@ -1,0 +1,31 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "ApiX.Localization/0.1.0": {
+        "runtime": {
+          "ApiX.Localization.dll": {}
+        },
+        "resources": {
+          "af/ApiX.Localization.resources.dll": {
+            "locale": "af"
+          },
+          "en/ApiX.Localization.resources.dll": {
+            "locale": "en"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ApiX.Localization/0.1.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

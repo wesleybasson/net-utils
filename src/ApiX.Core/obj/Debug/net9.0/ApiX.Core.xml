@@ -1,0 +1,938 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ApiX.Core</name>
+    </assembly>
+    <members>
+        <member name="T:ApiX.Core.Domain.ModelBase">
+            <summary>
+            Base class for domain entities with common auditing and soft-delete metadata.
+            </summary>
+        </member>
+        <member name="P:ApiX.Core.Domain.ModelBase.Id">
+            <summary>
+            Gets or sets the unique identifier for the entity.
+            </summary>
+        </member>
+        <member name="P:ApiX.Core.Domain.ModelBase.DateCreated">
+            <summary>
+            Gets or sets the timestamp when the entity was created (UTC recommended).
+            </summary>
+        </member>
+        <member name="P:ApiX.Core.Domain.ModelBase.DateUpdated">
+            <summary>
+            Gets or sets the timestamp when the entity was last updated (UTC recommended).
+            </summary>
+        </member>
+        <member name="P:ApiX.Core.Domain.ModelBase.CreatedBy">
+            <summary>
+            Gets or sets the identifier of the user or actor who created the entity.
+            </summary>
+        </member>
+        <member name="P:ApiX.Core.Domain.ModelBase.UpdatedBy">
+            <summary>
+            Gets or sets the identifier of the user or actor who last updated the entity.
+            </summary>
+        </member>
+        <member name="P:ApiX.Core.Domain.ModelBase.Comments">
+            <summary>
+            Gets or sets optional free-form notes about the entity.
+            </summary>
+        </member>
+        <member name="P:ApiX.Core.Domain.ModelBase.CustomStringField">
+            <summary>
+            Gets or sets an optional extensibility field for simple string metadata.
+            Consider replacing with structured metadata if needs expand.
+            </summary>
+        </member>
+        <member name="P:ApiX.Core.Domain.ModelBase.IsDeleted">
+            <summary>
+            Gets or sets a value indicating whether the entity has been soft-deleted.
+            </summary>
+        </member>
+        <member name="T:ApiX.Core.Guards.CheckResult">
+            <summary>
+            Represents the result of a guard or validation check.
+            Encapsulates whether the check succeeded (<see cref="P:ApiX.Core.Guards.CheckResult.IsValid"/>)
+            and an optional failure reason (<see cref="P:ApiX.Core.Guards.CheckResult.Reason"/>).
+            </summary>
+        </member>
+        <member name="P:ApiX.Core.Guards.CheckResult.IsValid">
+            <summary>
+            Gets a value indicating whether the check was successful.
+            </summary>
+        </member>
+        <member name="P:ApiX.Core.Guards.CheckResult.Reason">
+            <summary>
+            Gets the reason for failure, if the check was not successful; otherwise <c>null</c>.
+            </summary>
+        </member>
+        <member name="M:ApiX.Core.Guards.CheckResult.#ctor(System.Boolean,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ApiX.Core.Guards.CheckResult"/> struct.
+            </summary>
+            <param name="isValid">Indicates whether the check passed or failed.</param>
+            <param name="reason">An optional failure reason; ignored if <paramref name="isValid"/> is <c>true</c>.</param>
+        </member>
+        <member name="M:ApiX.Core.Guards.CheckResult.Ok">
+            <summary>
+            Creates a successful check result.
+            </summary>
+            <returns>A <see cref="T:ApiX.Core.Guards.CheckResult"/> with <see cref="P:ApiX.Core.Guards.CheckResult.IsValid"/> set to <c>true</c>.</returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.CheckResult.Fail(System.String)">
+            <summary>
+            Creates a failed check result.
+            </summary>
+            <param name="reason">The reason the check failed.</param>
+            <returns>A <see cref="T:ApiX.Core.Guards.CheckResult"/> with <see cref="P:ApiX.Core.Guards.CheckResult.IsValid"/> set to <c>false</c> and the given reason.</returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.CheckResult.IfInvalid(System.Action{System.String})">
+            <summary>
+            Executes the specified action if the check failed.
+            </summary>
+            <param name="onInvalid">The action to invoke when <see cref="P:ApiX.Core.Guards.CheckResult.IsValid"/> is <c>false</c>.
+            The <see cref="P:ApiX.Core.Guards.CheckResult.Reason"/> is passed to the action.</param>
+            <returns><c>true</c> if the result was invalid (and the action was invoked); otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.CheckResult.ThrowIfInvalid(System.Func{System.String,System.Exception})">
+            <summary>
+            Throws an exception if the check failed.
+            </summary>
+            <param name="exceptionFactory">A factory that creates the exception to throw,
+            given the <see cref="P:ApiX.Core.Guards.CheckResult.Reason"/>.</param>
+            <exception cref="T:System.Exception">The exception returned by <paramref name="exceptionFactory"/> if the result is invalid.</exception>
+        </member>
+        <member name="M:ApiX.Core.Guards.CheckResult.WithReason(System.String)">
+            <summary>
+            Returns a new <see cref="T:ApiX.Core.Guards.CheckResult"/> with the same validity,
+            but with the failure reason replaced.
+            </summary>
+            <param name="reason">The replacement reason for failure.</param>
+            <returns>
+            The current instance if valid; otherwise, a failed <see cref="T:ApiX.Core.Guards.CheckResult"/>
+            with the specified reason.
+            </returns>
+        </member>
+        <member name="T:ApiX.Core.Guards.Guard`1">
+             <summary>
+             Provides a fluent guard around a value for ergonomic validation checks.
+             </summary>
+             <typeparam name="T">The type of the value being guarded.</typeparam>
+             <example>
+             Typical usage:
+             <code>
+             var guard = new Guard/<User/>(user);
+             var result = guard.NotNull("User must not be null");
+            
+             // or fluently
+             Guard.That(user)
+                 .NotNull("User required")
+                 .IfInvalid(reason => Console.WriteLine(reason));
+             </code>
+             </example>
+        </member>
+        <member name="P:ApiX.Core.Guards.Guard`1.Value">
+            <summary>
+            Gets the underlying value being checked by this guard.
+            </summary>
+        </member>
+        <member name="M:ApiX.Core.Guards.Guard`1.#ctor(`0)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ApiX.Core.Guards.Guard`1"/> struct
+            with the specified value to be validated.
+            </summary>
+            <param name="value">The entity value to be checked.</param>
+        </member>
+        <member name="M:ApiX.Core.Guards.Guard`1.Satisfies(System.Func{`0,System.Boolean},System.String)">
+            <summary>
+            Evaluates a custom predicate against the guarded value.
+            </summary>
+            <param name="predicate">The condition to test.</param>
+            <param name="reason">Optional failure reason if the predicate is not satisfied.</param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> indicating whether the predicate was satisfied.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Guard`1.That(`0@)">
+            <summary>
+            Returns the guarded value via an <c>out</c> parameter while preserving the guard instance.
+            Useful for inline access in fluent chains.
+            </summary>
+            <param name="value">The guarded value.</param>
+            <returns>The same <see cref="T:ApiX.Core.Guards.Guard`1"/> instance for continued chaining.</returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Guard`1.NotNull(System.String)">
+            <summary>
+            Ensures the guarded value is not <c>null</c>.
+            </summary>
+            <param name="reason">Optional custom failure reason.</param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> indicating success if the value is not <c>null</c>.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Guard`1.Null(System.String)">
+            <summary>
+            Ensures the guarded value is <c>null</c>.
+            </summary>
+            <param name="reason">Optional custom failure reason.</param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> indicating success if the value is <c>null</c>.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Guard`1.NotDefault(System.String)">
+            <summary>
+            Ensures the guarded value is not its type's default value.
+            </summary>
+            <param name="reason">Optional custom failure reason.</param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> indicating success if the value is not the default for <typeparamref name="T"/>.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Guard`1.EqualTo(`0,System.Collections.Generic.IEqualityComparer{`0},System.String)">
+            <summary>
+            Ensures the guarded value is equal to the specified other value.
+            </summary>
+            <param name="other">The value to compare against.</param>
+            <param name="cmp">Optional equality comparer. Defaults to <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>.</param>
+            <param name="reason">Optional custom failure reason.</param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> indicating success if the values are equal.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Guard`1.NotEqualTo(`0,System.Collections.Generic.IEqualityComparer{`0},System.String)">
+            <summary>
+            Ensures the guarded value is not equal to the specified other value.
+            </summary>
+            <param name="other">The value to compare against.</param>
+            <param name="cmp">Optional equality comparer. Defaults to <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>.</param>
+            <param name="reason">Optional custom failure reason.</param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> indicating success if the values are not equal.
+            </returns>
+        </member>
+        <member name="T:ApiX.Core.Guards.Ensure">
+            <summary>
+            Centralized guard/ensure checks. All methods are transport-agnostic and return CheckResult.
+            </summary>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.That``1(``0)">
+             <summary>
+             Creates a <see cref="T:ApiX.Core.Guards.Guard`1"/> instance for the specified value,
+             enabling fluent validation checks.
+             </summary>
+             <typeparam name="T">The type of the value to be guarded.</typeparam>
+             <param name="value">The value to wrap in a guard.</param>
+             <returns>
+             A <see cref="T:ApiX.Core.Guards.Guard`1"/> that provides fluent validation methods
+             such as <see cref="M:ApiX.Core.Guards.Guard`1.NotNull(System.String)"/> and <see cref="M:ApiX.Core.Guards.Guard`1.EqualTo(`0,System.Collections.Generic.IEqualityComparer{`0},System.String)"/>.
+             </returns>
+             <example>
+             <code>
+             var user = new User { Email = "test@example.com" };
+            
+             var result = Ensure.That(user)
+                                .NotNull("User must not be null")
+                                .IfInvalid(reason => Console.WriteLine(reason));
+             </code>
+             </example>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.Null``1(``0,System.String)">
+            <summary>
+            Ensures that the specified value is <c>null</c>.
+            </summary>
+            <typeparam name="T">The type of the value being checked.</typeparam>
+            <param name="value">The value to validate.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Expected null."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if the value is <c>null</c>,
+            otherwise invalid with the provided or default reason.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.NotNull``1(``0,System.String)">
+            <summary>
+            Ensures that the specified value is not <c>null</c>.
+            </summary>
+            <typeparam name="T">The type of the value being checked.</typeparam>
+            <param name="value">The value to validate.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Value cannot be null."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if the value is not <c>null</c>,
+            otherwise invalid with the provided or default reason.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.NotDefault``1(``0,System.String)">
+            <summary>
+            Ensures that the specified value is not the default for its type.
+            </summary>
+            <typeparam name="T">The type of the value being checked.</typeparam>
+            <param name="value">The value to validate.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Value cannot be default."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if the value is not the default value
+            of <typeparamref name="T"/>; otherwise invalid with the provided or default reason.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.GuidNotEmpty(System.Guid,System.String)">
+            <summary>
+            Ensures that the specified <see cref="T:System.Guid"/> is not <see cref="F:System.Guid.Empty"/>.
+            </summary>
+            <param name="value">The <see cref="T:System.Guid"/> to validate.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Guid cannot be empty."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="value"/> is not empty,
+            otherwise invalid with the provided or default reason.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.NotNullOrEmpty(System.String,System.String)">
+            <summary>
+            Ensures that the specified string is not <c>null</c> or empty (<c>""</c>).
+            </summary>
+            <param name="s">The string to validate.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"String cannot be null or empty."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="s"/> is not <c>null</c> or empty,
+            otherwise invalid with the provided or default reason.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.NotNullOrWhiteSpace(System.String,System.String)">
+            <summary>
+            Ensures that the specified string is not <c>null</c>, empty, or composed only of white-space characters.
+            </summary>
+            <param name="s">The string to validate.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"String cannot be null/whitespace."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="s"/> is not <c>null</c>, empty,
+            or white-space, otherwise invalid with the provided or default reason.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.LengthBetween(System.String,System.Int32,System.Int32,System.String)">
+            <summary>
+            Ensures that the length of the specified string falls within the given inclusive range.
+            </summary>
+            <param name="s">The string to validate.</param>
+            <param name="minInclusive">The minimum allowable string length (inclusive).</param>
+            <param name="maxInclusive">The maximum allowable string length (inclusive).</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to a message indicating the required range.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if the string length is between
+            <paramref name="minInclusive"/> and <paramref name="maxInclusive"/> (inclusive).
+            If <paramref name="s"/> is <c>null</c> or outside the range, the result is invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.Matches(System.String,System.Text.RegularExpressions.Regex,System.String)">
+            <summary>
+            Ensures that the specified string matches the given regular expression pattern.
+            </summary>
+            <param name="s">The string to validate.</param>
+            <param name="regex">The regular expression to test against.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"String did not match pattern."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="s"/> matches <paramref name="regex"/>,
+            otherwise invalid with the provided or default reason. If <paramref name="s"/> is <c>null</c>,
+            the result is invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.Empty``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+            Ensures that the specified sequence is <c>null</c> or contains no elements.
+            </summary>
+            <typeparam name="T">The type of elements in the sequence.</typeparam>
+            <param name="seq">The sequence to validate.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Expected sequence to be empty."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if the sequence is <c>null</c> or empty,
+            otherwise invalid with the provided or default reason.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.NotEmpty``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+            Ensures that the specified sequence is not <c>null</c> and contains at least one element.
+            </summary>
+            <typeparam name="T">The type of elements in the sequence.</typeparam>
+            <param name="seq">The sequence to validate.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Sequence cannot be null or empty."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if the sequence is not <c>null</c> and not empty,
+            otherwise invalid with the provided or default reason.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.Any``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean},System.String)">
+            <summary>
+            Ensures that the specified sequence contains at least one element.
+            If a predicate is provided, ensures that at least one element matches it.
+            </summary>
+            <typeparam name="T">The type of elements in the sequence.</typeparam>
+            <param name="seq">The sequence to validate.</param>
+            <param name="predicate">
+            Optional condition to test elements against. If <c>null</c>, the check only tests for non-emptiness.
+            </param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Sequence has no matching elements."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if the sequence has at least one element
+            (or at least one matching the predicate), otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.None``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean},System.String)">
+            <summary>
+            Ensures that the specified sequence contains no elements.
+            If a predicate is provided, ensures that no elements match it.
+            </summary>
+            <typeparam name="T">The type of elements in the sequence.</typeparam>
+            <param name="seq">The sequence to validate.</param>
+            <param name="predicate">
+            Optional condition to test elements against. If <c>null</c>, the check ensures the sequence is empty.
+            </param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Sequence contained disallowed elements."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if the sequence is empty
+            (or no elements satisfy the predicate), otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.All``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean},System.String)">
+            <summary>
+            Ensures that all elements of the specified sequence satisfy the given predicate.
+            </summary>
+            <typeparam name="T">The type of elements in the sequence.</typeparam>
+            <param name="seq">The sequence to validate.</param>
+            <param name="predicate">The condition that all elements must satisfy.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Not all elements satisfied predicate."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if all elements satisfy <paramref name="predicate"/>,
+            otherwise invalid. If the sequence is <c>null</c>, the result is invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.CountAtLeast``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.String)">
+            <summary>
+            Ensures that the sequence contains at least the specified minimum number of elements.
+            </summary>
+            <typeparam name="T">The type of elements in the sequence.</typeparam>
+            <param name="seq">The sequence to validate.</param>
+            <param name="minInclusive">The minimum required count (inclusive).</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to a message indicating the minimum required count.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if the count of <paramref name="seq"/> is greater than
+            or equal to <paramref name="minInclusive"/>; otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.CountAtMost``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.String)">
+            <summary>
+            Ensures that the sequence contains no more than the specified maximum number of elements.
+            </summary>
+            <typeparam name="T">The type of elements in the sequence.</typeparam>
+            <param name="seq">The sequence to validate.</param>
+            <param name="maxInclusive">The maximum allowed count (inclusive).</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to a message indicating the maximum allowed count.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if the count of <paramref name="seq"/> is less than
+            or equal to <paramref name="maxInclusive"/>; otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.CountBetween``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Int32,System.String)">
+            <summary>
+            Ensures that the sequence contains a number of elements within the specified inclusive range.
+            </summary>
+            <typeparam name="T">The type of elements in the sequence.</typeparam>
+            <param name="seq">The sequence to validate.</param>
+            <param name="minInclusive">The minimum allowable count (inclusive).</param>
+            <param name="maxInclusive">The maximum allowable count (inclusive).</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to a message indicating the required range.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if the count of <paramref name="seq"/> is between
+            <paramref name="minInclusive"/> and <paramref name="maxInclusive"/> (inclusive),
+            otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.UniqueBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Collections.Generic.IEqualityComparer{``1},System.String)">
+            <summary>
+            Ensures that all elements in the sequence are unique according to a key selector.
+            </summary>
+            <typeparam name="T">The type of elements in the sequence.</typeparam>
+            <typeparam name="TKey">The type of the key used to determine uniqueness.</typeparam>
+            <param name="seq">The sequence to validate.</param>
+            <param name="keySelector">A function that extracts a comparison key from each element.</param>
+            <param name="cmp">
+            Optional equality comparer for comparing keys. Defaults to <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>.
+            </param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Sequence contains duplicate keys."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if all extracted keys are unique,
+            otherwise invalid. If the sequence is <c>null</c>, the result is invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.Equal``1(``0,``0,System.Collections.Generic.IEqualityComparer{``0},System.String)">
+            <summary>
+            Ensures that two values are equal using the specified equality comparer.
+            </summary>
+            <typeparam name="T">The type of the values being compared.</typeparam>
+            <param name="a">The first value.</param>
+            <param name="b">The second value.</param>
+            <param name="cmp">
+            Optional equality comparer. If <c>null</c>, defaults to <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>.
+            </param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Values are not equal."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="a"/> and <paramref name="b"/>
+            are equal according to the comparer; otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.NotEqual``1(``0,``0,System.Collections.Generic.IEqualityComparer{``0},System.String)">
+            <summary>
+            Ensures that two values are not equal using the specified equality comparer.
+            </summary>
+            <typeparam name="T">The type of the values being compared.</typeparam>
+            <param name="a">The first value.</param>
+            <param name="b">The second value.</param>
+            <param name="cmp">
+            Optional equality comparer. If <c>null</c>, defaults to <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>.
+            </param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Values must not be equal."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="a"/> and <paramref name="b"/>
+            are not equal according to the comparer; otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.OneOf``1(``0,System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEqualityComparer{``0},System.String)">
+            <summary>
+            Ensures that a value is one of a specified set of allowed options.
+            </summary>
+            <typeparam name="T">The type of the value being compared.</typeparam>
+            <param name="value">The value to check.</param>
+            <param name="options">The set of allowed values.</param>
+            <param name="cmp">
+            Optional equality comparer. If <c>null</c>, defaults to <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>.
+            </param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Value was not one of the allowed options."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="value"/> is found in
+            <paramref name="options"/> according to the comparer; otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.NotOneOf``1(``0,System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEqualityComparer{``0},System.String)">
+            <summary>
+            Ensures that a value is not part of a specified set of disallowed options.
+            </summary>
+            <typeparam name="T">The type of the value being compared.</typeparam>
+            <param name="value">The value to check.</param>
+            <param name="options">The set of disallowed values.</param>
+            <param name="cmp">
+            Optional equality comparer. If <c>null</c>, defaults to <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>.
+            </param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Value must not be one of the disallowed options."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="value"/> is not found in
+            <paramref name="options"/> according to the comparer; otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.GreaterThan``1(``0,``0,System.String)">
+            <summary>
+            Ensures that a value is strictly greater than the specified minimum.
+            </summary>
+            <typeparam name="T">The type of the value being compared. Must implement <see cref="T:System.IComparable`1"/>.</typeparam>
+            <param name="value">The value to validate.</param>
+            <param name="minExclusive">The exclusive lower bound.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Value must be &gt; {minExclusive}."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="value"/> is greater than
+            <paramref name="minExclusive"/>; otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.GreaterOrEqual``1(``0,``0,System.String)">
+            <summary>
+            Ensures that a value is greater than or equal to the specified minimum.
+            </summary>
+            <typeparam name="T">The type of the value being compared. Must implement <see cref="T:System.IComparable`1"/>.</typeparam>
+            <param name="value">The value to validate.</param>
+            <param name="minInclusive">The inclusive lower bound.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Value must be ≥ {minInclusive}."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="value"/> is greater than or equal to
+            <paramref name="minInclusive"/>; otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.LessThan``1(``0,``0,System.String)">
+            <summary>
+            Ensures that a value is strictly less than the specified maximum.
+            </summary>
+            <typeparam name="T">The type of the value being compared. Must implement <see cref="T:System.IComparable`1"/>.</typeparam>
+            <param name="value">The value to validate.</param>
+            <param name="maxExclusive">The exclusive upper bound.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Value must be &lt; {maxExclusive}."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="value"/> is less than
+            <paramref name="maxExclusive"/>; otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.LessOrEqual``1(``0,``0,System.String)">
+            <summary>
+            Ensures that a value is less than or equal to the specified maximum.
+            </summary>
+            <typeparam name="T">The type of the value being compared. Must implement <see cref="T:System.IComparable`1"/>.</typeparam>
+            <param name="value">The value to validate.</param>
+            <param name="maxInclusive">The inclusive upper bound.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Value must be ≤ {maxInclusive}."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="value"/> is less than or equal to
+            <paramref name="maxInclusive"/>; otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.Between``1(``0,``0,``0,System.String)">
+            <summary>
+            Ensures that a value lies within the specified inclusive range.
+            </summary>
+            <typeparam name="T">The type of the value being compared. Must implement <see cref="T:System.IComparable`1"/>.</typeparam>
+            <param name="value">The value to validate.</param>
+            <param name="minInclusive">The inclusive lower bound.</param>
+            <param name="maxInclusive">The inclusive upper bound.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Value must be between {minInclusive} and {maxInclusive}."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="value"/> is greater than or equal to
+            <paramref name="minInclusive"/> and less than or equal to <paramref name="maxInclusive"/>; otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.EnumDefined``1(``0,System.String)">
+            <summary>
+            Ensures that the specified enum value is defined within its enumeration type.
+            </summary>
+            <typeparam name="TEnum">The type of the enumeration.</typeparam>
+            <param name="value">The enum value to validate.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Enum value '{value}' is not defined."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="value"/> is a defined member
+            of <typeparamref name="TEnum"/>; otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.ValidUri(System.String,System.UriKind,System.String)">
+            <summary>
+            Ensures that the specified string represents a valid URI of the given kind.
+            </summary>
+            <param name="s">The string to validate as a URI.</param>
+            <param name="kind">
+            The kind of URI to validate against (e.g., <see cref="F:System.UriKind.Absolute"/>).
+            Defaults to <see cref="F:System.UriKind.Absolute"/>.
+            </param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Invalid URI."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="s"/> can be parsed as a URI
+            of the specified <paramref name="kind"/>; otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.Satisfies``1(``0,System.Func{``0,System.Boolean},System.String)">
+            <summary>
+            Ensures that the specified value satisfies the given predicate.
+            </summary>
+            <typeparam name="T">The type of the value being checked.</typeparam>
+            <param name="value">The value to validate.</param>
+            <param name="predicate">The condition to test.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            Defaults to <c>"Predicate not satisfied."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="predicate"/> returns <c>true</c>
+            for <paramref name="value"/>; otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.And(ApiX.Core.Guards.CheckResult[])">
+            <summary>
+            Combines multiple check results, returning valid only if all are valid.
+            </summary>
+            <param name="results">The set of check results to combine.</param>
+            <returns>
+            The first failed <see cref="T:ApiX.Core.Guards.CheckResult"/> if any checks fail; otherwise <see cref="M:ApiX.Core.Guards.CheckResult.Ok"/>.
+            </returns>
+            <remarks>
+            This method short-circuits: the first invalid result is returned immediately.
+            </remarks>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.Or(ApiX.Core.Guards.CheckResult[])">
+            <summary>
+            Combines multiple check results, returning valid if any are valid.
+            </summary>
+            <param name="results">The set of check results to combine.</param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if at least one input is valid;
+            otherwise invalid, with the reason from the last failed result.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.Not(ApiX.Core.Guards.CheckResult,System.String)">
+            <summary>
+            Negates the specified check result.
+            </summary>
+            <param name="result">The check result to negate.</param>
+            <param name="reason">
+            Optional custom reason to return if the negated result fails.
+            Defaults to <c>"Negation failed (original was valid)."</c>.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="result"/> is invalid,
+            otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.IsNull``1(``0,System.String)">
+            <summary>
+            Ensures that the specified value is <c>null</c>.
+            </summary>
+            <typeparam name="T">The type of the value to check.</typeparam>
+            <param name="entity">The value to validate.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="entity"/> is <c>null</c>;
+            otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.IsNotNull``1(``0,System.String)">
+            <summary>
+            Ensures that the specified value is not <c>null</c>.
+            </summary>
+            <typeparam name="T">The type of the value to check.</typeparam>
+            <param name="entity">The value to validate.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="entity"/> is not <c>null</c>;
+            otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.IsEmpty``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+            Ensures that the specified collection is <c>null</c> or contains no elements.
+            </summary>
+            <typeparam name="T">The type of the collection element.</typeparam>
+            <param name="entity">The collection to validate.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="entity"/> is <c>null</c> or empty;
+            otherwise invalid.
+            </returns>
+        </member>
+        <member name="M:ApiX.Core.Guards.Ensure.IsNotEmpty``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+            Ensures that the specified collection is not <c>null</c> and contains at least one element.
+            </summary>
+            <typeparam name="T">The type of the collection element.</typeparam>
+            <param name="entity">The collection to validate.</param>
+            <param name="reason">
+            Optional custom reason to return if the check fails.
+            </param>
+            <returns>
+            A <see cref="T:ApiX.Core.Guards.CheckResult"/> that is valid if <paramref name="entity"/> is not <c>null</c>
+            and contains at least one element; otherwise invalid.
+            </returns>
+        </member>
+        <member name="T:ApiX.Core.Paging.PagedResult`1">
+            <summary>
+            Represents a paged set of items with common pagination metadata.
+            </summary>
+            <typeparam name="T">The item type contained in the page.</typeparam>
+        </member>
+        <member name="P:ApiX.Core.Paging.PagedResult`1.Items">
+            <summary>
+            Gets or sets the items for the current page.
+            </summary>
+        </member>
+        <member name="P:ApiX.Core.Paging.PagedResult`1.TotalCount">
+            <summary>
+            Gets or sets the total number of items across all pages.
+            </summary>
+        </member>
+        <member name="P:ApiX.Core.Paging.PagedResult`1.PageNumber">
+            <summary>
+            Gets or sets the current page number (1-based).
+            </summary>
+        </member>
+        <member name="P:ApiX.Core.Paging.PagedResult`1.PageSize">
+            <summary>
+            Gets or sets the number of items per page.
+            </summary>
+        </member>
+        <member name="P:ApiX.Core.Paging.PagedResult`1.TotalPages">
+            <summary>
+            Gets the total number of pages based on <see cref="P:ApiX.Core.Paging.PagedResult`1.TotalCount"/> and <see cref="P:ApiX.Core.Paging.PagedResult`1.PageSize"/>.
+            </summary>
+        </member>
+        <member name="P:ApiX.Core.Paging.PagedResult`1.HasNextPage">
+            <summary>
+            Gets a value indicating whether there is a page after the current one.
+            </summary>
+        </member>
+        <member name="P:ApiX.Core.Paging.PagedResult`1.HasPreviousPage">
+            <summary>
+            Gets a value indicating whether there is a page before the current one.
+            </summary>
+        </member>
+        <member name="T:ApiX.Core.Security.ApiKeyFormat">
+            <summary>
+            Enum for defining the format of an API Key.
+            </summary>
+        </member>
+        <member name="F:ApiX.Core.Security.ApiKeyFormat.OpaqueString">
+            <summary>Opaque string — compare with string equality.</summary>
+        </member>
+        <member name="F:ApiX.Core.Security.ApiKeyFormat.Base64">
+            <summary>Base64-encoded bytes — compare with fixed-time byte equality.</summary>
+        </member>
+        <member name="F:ApiX.Core.Security.ApiKeyFormat.Hex">
+            <summary>Hex-encoded bytes — compare with fixed-time byte equality.</summary>
+        </member>
+        <member name="T:ApiX.Core.Security.KeyValidation">
+            <summary>Result of a key validation.</summary>
+        </member>
+        <member name="M:ApiX.Core.Security.KeyValidation.#ctor(System.Boolean,System.String)">
+            <summary>Result of a key validation.</summary>
+        </member>
+        <member name="M:ApiX.Core.Security.KeyValidation.Ok">
+            <summary>
+            Creates a successful <see cref="T:ApiX.Core.Security.KeyValidation"/> result.
+            </summary>
+            <returns>A <see cref="T:ApiX.Core.Security.KeyValidation"/> indicating a valid key, with no failure reason.</returns>
+        </member>
+        <member name="M:ApiX.Core.Security.KeyValidation.Fail(System.String)">
+            <summary>
+            Creates a failed <see cref="T:ApiX.Core.Security.KeyValidation"/> result with a specified reason.
+            </summary>
+            <param name="reason">A descriptive message indicating why validation failed.</param>
+            <returns>A <see cref="T:ApiX.Core.Security.KeyValidation"/> indicating an invalid key and containing the failure reason.</returns>
+        </member>
+        <member name="T:ApiX.Core.Security.ApiKeyValidator">
+            <summary>
+            Provides helper methods for validating API keys in various formats, 
+            including opaque string tokens, Base64-encoded keys, and hex-encoded keys.
+            </summary>
+            <remarks>
+            Methods in this class support both simple ordinal string comparisons 
+            and timing-safe byte comparisons for encoded keys to help prevent timing attacks.
+            </remarks>
+        </member>
+        <member name="M:ApiX.Core.Security.ApiKeyValidator.IsApiKeyValid(System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Validates an API key against an expected value using a string comparison
+            (opaque token). Uses Ordinal comparison by default.
+            </summary>
+        </member>
+        <member name="M:ApiX.Core.Security.ApiKeyValidator.ValidateOpaque(System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Validates and returns <see cref="T:ApiX.Core.Security.KeyValidation"/> with a reason for failure (opaque token).
+            </summary>
+        </member>
+        <member name="M:ApiX.Core.Security.ApiKeyValidator.ValidateEncoded(System.String,System.String,ApiX.Core.Security.ApiKeyFormat,System.Boolean)">
+            <summary>
+            Validates keys encoded as Base64 or Hex using timing-safe byte equality.
+            </summary>
+        </member>
+        <member name="M:ApiX.Core.Security.ApiKeyValidator.ValidateBase64(System.String,System.String,System.Boolean)">
+            <summary>
+            Convenience wrapper: Base64 timing-safe validation.
+            </summary>
+        </member>
+        <member name="M:ApiX.Core.Security.ApiKeyValidator.ValidateHex(System.String,System.String,System.Boolean)">
+            <summary>
+            Convenience wrapper: Hex timing-safe validation.
+            </summary>
+        </member>
+        <member name="T:ApiX.Core.Security.KeyCheck">
+            <summary>
+            Legacy extension methods for API key validation.
+            </summary>
+            <remarks>
+            This class has been superseded by <see cref="T:ApiX.Core.Security.ApiKeyValidator"/> and is retained 
+            only for backward compatibility. New code should prefer <see cref="T:ApiX.Core.Security.ApiKeyValidator"/>.
+            </remarks>
+        </member>
+        <member name="M:ApiX.Core.Security.KeyCheck.AesApiKeyNotValid(System.String,System.String)">
+            <summary>Obsolete. Use <see cref="M:ApiX.Core.Security.ApiKeyValidator.IsApiKeyValid(System.String,System.String,System.Boolean,System.Boolean)"/> / <see cref="M:ApiX.Core.Security.ApiKeyValidator.ValidateOpaque(System.String,System.String,System.Boolean,System.Boolean)"/> instead.</summary>
+        </member>
+        <member name="M:ApiX.Core.Security.KeyCheck.MasterApiKeyNotValid(System.String,System.String)">
+            <summary>Obsolete. Use <see cref="M:ApiX.Core.Security.ApiKeyValidator.IsApiKeyValid(System.String,System.String,System.Boolean,System.Boolean)"/> / <see cref="M:ApiX.Core.Security.ApiKeyValidator.ValidateOpaque(System.String,System.String,System.Boolean,System.Boolean)"/> instead.</summary>
+        </member>
+    </members>
+</doc>

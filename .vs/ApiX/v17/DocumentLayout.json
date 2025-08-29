@@ -1,0 +1,45 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Projects\\libraries\\apix\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{13F8771E-0E55-8ACB-A690-E49FCCBA184C}|src\\ApiX.Security\\ApiX.Security.csproj|d:\\projects\\libraries\\apix\\src\\apix.security\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{13F8771E-0E55-8ACB-A690-E49FCCBA184C}|src\\ApiX.Security\\ApiX.Security.csproj|solutionrelative:src\\apix.security\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "README.md",
+              "DocumentMoniker": "D:\\Projects\\libraries\\apix\\src\\ApiX.Security\\README.md",
+              "RelativeDocumentMoniker": "src\\ApiX.Security\\README.md",
+              "ToolTip": "D:\\Projects\\libraries\\apix\\src\\ApiX.Security\\README.md",
+              "RelativeToolTip": "src\\ApiX.Security\\README.md",
+              "ViewState": "AgIAAPUBAAAAAAAAAAAYwAcCAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2025-08-29T10:45:21.206Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e506b91c-c606-466a-90a9-123d1d1e12b3}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

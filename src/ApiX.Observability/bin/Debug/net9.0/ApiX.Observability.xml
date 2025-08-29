@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ApiX.Observability</name>
+    </assembly>
+    <members>
+        <member name="T:ApiX.Observability.Class1">
+            <summary>
+            
+            </summary>
+        </member>
+    </members>
+</doc>
