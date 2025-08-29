@@ -1,0 +1,40 @@
+# --- Build outputs
+**/bin/
+**/obj/
+artifacts/
+dist/
+_build/
+
+# --- Test
+**/TestResults/
+*.coverage
+*.coveragexml
+.coverage/
+
+# --- IDEs
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# --- NuGet
+# Old-style packages folder (packages.config) & any local caches
+packages/
+**/packages/*
+!**/packages/build/
+!**/packages/repositories.config
+.nuget/
+.nuget/packages/
+
+# Do not check in produced packages
+*.nupkg
+*.snupkg
+
+# --- Logs / misc
+*.log
+Logs/
+*.psess
+*.vsp
+*.vspx
