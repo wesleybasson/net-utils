@@ -12,7 +12,7 @@
     <releaseNotes>Branch: main
       Commit: dev
       Build:  0
-      Date:   2025-08-29T08:42:59Z
+      Date:   2025-08-29T12:25:03Z
       Repo:   ApiX</releaseNotes>
     <tags>aspnetcore webapi apix validation observability security</tags>
     <repository type="git" url="https://github.com/wesleybasson/net-utils" branch="main" commit="dev" />

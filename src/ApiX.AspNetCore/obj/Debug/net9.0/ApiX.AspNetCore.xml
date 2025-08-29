@@ -65,20 +65,6 @@
         <member name="M:ApiX.AspNetCore.Filters.UserIdInjectionFilter.OnActionExecutionAsync(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext,Microsoft.AspNetCore.Mvc.Filters.ActionExecutionDelegate)">
             <inheritdoc />
         </member>
-        <member name="T:ApiX.AspNetCore.Middleware.ErrorHandler">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:ApiX.AspNetCore.Middleware.ErrorHandler.UseCustomErrors(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.Extensions.Hosting.IHostEnvironment,System.Func{System.Exception,System.Int32},System.Boolean)">
-            <summary>
-            
-            </summary>
-            <param name="app"></param>
-            <param name="environment"></param>
-            <param name="customExceptionExtension"></param>
-            <param name="includePayload"></param>
-        </member>
         <member name="T:ApiX.AspNetCore.ProblemDetails.ExceptionToProblemProfile">
             <summary>
             

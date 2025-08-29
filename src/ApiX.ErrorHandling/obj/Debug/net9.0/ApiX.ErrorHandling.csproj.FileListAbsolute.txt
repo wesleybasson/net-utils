@@ -1,0 +1,15 @@
+D:\Projects\libraries\apix\src\ApiX.ErrorHandling\bin\Debug\net9.0\ApiX.ErrorHandling.deps.json
+D:\Projects\libraries\apix\src\ApiX.ErrorHandling\bin\Debug\net9.0\ApiX.ErrorHandling.dll
+D:\Projects\libraries\apix\src\ApiX.ErrorHandling\bin\Debug\net9.0\ApiX.ErrorHandling.pdb
+D:\Projects\libraries\apix\src\ApiX.ErrorHandling\bin\Debug\net9.0\ApiX.ErrorHandling.xml
+D:\Projects\libraries\apix\src\ApiX.ErrorHandling\obj\Debug\net9.0\ApiX.ErrorHandling.csproj.AssemblyReference.cache
+D:\Projects\libraries\apix\src\ApiX.ErrorHandling\obj\Debug\net9.0\ApiX.ErrorHandling.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\libraries\apix\src\ApiX.ErrorHandling\obj\Debug\net9.0\ApiX.ErrorHandling.AssemblyInfoInputs.cache
+D:\Projects\libraries\apix\src\ApiX.ErrorHandling\obj\Debug\net9.0\ApiX.ErrorHandling.AssemblyInfo.cs
+D:\Projects\libraries\apix\src\ApiX.ErrorHandling\obj\Debug\net9.0\ApiX.ErrorHandling.csproj.CoreCompileInputs.cache
+D:\Projects\libraries\apix\src\ApiX.ErrorHandling\obj\Debug\net9.0\ApiX.ErrorHandling.sourcelink.json
+D:\Projects\libraries\apix\src\ApiX.ErrorHandling\obj\Debug\net9.0\ApiX.ErrorHandling.dll
+D:\Projects\libraries\apix\src\ApiX.ErrorHandling\obj\Debug\net9.0\refint\ApiX.ErrorHandling.dll
+D:\Projects\libraries\apix\src\ApiX.ErrorHandling\obj\Debug\net9.0\ApiX.ErrorHandling.xml
+D:\Projects\libraries\apix\src\ApiX.ErrorHandling\obj\Debug\net9.0\ApiX.ErrorHandling.pdb
+D:\Projects\libraries\apix\src\ApiX.ErrorHandling\obj\Debug\net9.0\ref\ApiX.ErrorHandling.dll

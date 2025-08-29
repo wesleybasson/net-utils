@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("0.1.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("\r\n      0.1.0\r\n      +branch=main\r\n      +commit=dev\r\n      +build=0\r\n      +buil" +
-    "t=2025-08-29T08:43:04Z\r\n    .68bea90ac9a41155b0434f4e76b036f8fa3bc5dd")]
+    "t=2025-08-29T12:25:06Z\r\n    .62e69e9b9d685339af475595eacdf253d5d50623")]
 [assembly: System.Reflection.AssemblyProductAttribute("ApiX")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ApiX.Data.EFCore")]
 [assembly: System.Reflection.AssemblyVersionAttribute("0.1.0.0")]
